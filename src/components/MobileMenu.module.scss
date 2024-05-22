@@ -1,0 +1,89 @@
+.container {
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+    .row {
+        padding: 10px;
+        justify-content: flex-end;
+        border-bottom: 1px solid #ddd;
+
+        .togglemenumobile {
+
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: -1px;
+            padding-left: 0px;
+            flex:0 0 40px;
+            max-width: 40px;
+            width: 40px;
+            padding-right: 0;
+            i {
+                background: #fff;
+                padding: 10px;
+                border-radius: 10px;
+                margin-left: -5px;
+            }
+
+            i:hover {
+                background: #f3f3f3;
+                padding: 10px;
+                border-radius: 5px;
+                margin-left: -5px;
+            }
+        }
+
+        .logomobile {
+            text-align: left;
+            cursor: pointer; 
+            padding: 0;
+            margin-left: -2px;
+            width: 59.333333%;
+            @media(max-width:539px){
+                width: 57.333333%;
+            }
+        }
+
+        .righticonmobile {
+            font-size: 15px;
+            text-align: right;
+            font-weight: bold;
+            right: 1px;
+            top: 5px;
+            cursor: pointer;
+
+            i {
+                background: #fff;
+                font-size: 16px;
+                padding: 10px;
+                font-weight: 600;
+                border-radius: 10px;
+            }
+
+            i:hover {
+                background: #f3f3f3;
+                padding: 10px;
+                border-radius: 5px;
+            }
+        }
+    }
+
+    .flyoutpanel {
+
+        position: absolute;
+        right: 0px;
+        background: #fff;
+        padding: 0 22px 0 10px;
+        width: 100%;
+        z-index: 1000;
+        box-shadow: 10px 10px 15px rgba(128, 128, 128, 0.5);
+        box-sizing: border-box;
+        > div{
+        }
+        .is-active,
+        .is-underlined{
+            background: #FAFAFA;
+        }
+    }
+
+}

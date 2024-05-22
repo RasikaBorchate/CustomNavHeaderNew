@@ -1,0 +1,29 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/spfx-serve.schema.json",
+  "port": 4321,
+  "https": true,
+  "serveConfigurations": {
+    "default": {
+      "pageUrl": "https://conais.sharepoint.com/sites/SPFXDEV/SitePages/test.aspx",
+      "customActions": {
+        "ab68a11b-c5ea-4d3b-86e9-b02d9060e8fd": {
+          "location": "ClientSideExtension.ApplicationCustomizer",
+          "properties": {
+            "testMessage": "Test message"
+          }
+        }
+      }
+    },
+    "customHeader": {
+      "pageUrl": "https://conais.sharepoint.com/sites/SPFXDEV/SitePages/test.aspx",
+      "customActions": {
+        "ab68a11b-c5ea-4d3b-86e9-b02d9060e8fd": {
+          "location": "ClientSideExtension.ApplicationCustomizer",
+          "properties": {
+            "testMessage": "Test message"
+          }
+        }
+      }
+    }
+  }
+}

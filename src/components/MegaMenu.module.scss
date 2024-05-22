@@ -1,0 +1,208 @@
+.null {
+  position: fixed;
+}
+.container {
+  border-bottom: 1px solid #efefef;
+}
+
+.logoHomeUrL {
+  cursor: pointer;
+  text-decoration: none !important;
+
+  .logo {
+      display: block;
+      max-width: 192px;
+      height: auto;
+      min-width: auto;
+      @media(max-width:1079px){
+        max-width: 125px;
+      }
+
+  }
+}
+
+.menuContainer
+{
+  margin-top: 10px;
+}
+.searchBoxContainer {
+  display: flex;
+  align-items: center; // This centers the search box vertically
+  justify-content: flex-end; // This aligns the search box to the right
+  height: 40px;
+  padding-top: 25px;
+  .ms-SearchBox {
+    max-width: 300px; // Adjust the width as needed
+  }
+
+  i {
+    cursor: pointer;
+    font-size: 28px;
+    font-weight: 400;
+  }
+  svg{
+    width: 36px;
+    height: 36px;
+  }
+  button {
+      span {
+          i {
+              font-size: 22px;
+              font-weight: bold;
+              margin-right: 15px;
+              cursor: pointer;
+              color: black;
+          }
+      }
+  }
+  > i{
+    margin-right: 18px;
+  }
+  > div{
+    margin-right: 18px;
+    &:last-child{
+      margin-right: 0;
+    }
+  }
+  @media(max-width:1024px){
+    padding-right: 0!important;
+  }
+}
+
+.searchBoxWrapper{
+  display: flex;
+  justify-content: space-between;
+  background: #FAFAFA;
+  height: 40px;
+  position: relative;
+  right: 0;
+  &::after{
+    display: none!important;
+  }
+  &.is-active{
+    &::after{
+      display: none!important;
+    }
+  }
+  &:hover{
+    > div{
+      color:#212121!important;
+    }
+  }
+  > div{
+    color:#212121;
+    order: 2;
+  }
+  input{
+    font-size: 16px;
+    order: 1;
+  }
+}
+
+.searchBoxContent{
+  width: 300px;
+}
+
+@media only screen and (max-width: 768px) {
+  .searchBoxContainer {
+      display: flex;
+      align-items: center; // This centers the search box vertically
+      justify-content: center; // This aligns the search box to the right
+      padding: 15px;
+      height: 65px !important;
+  }
+  .searchBoxContent{
+    width: 150px;
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  .searchBoxContainer {
+      display: flex;
+      align-items: center; // This centers the search box vertically
+      justify-content: flex-end; // This aligns the search box to the right
+      padding: 12px 24;
+      height: 64px !important;
+      > i{
+        margin:0 9px;
+      }
+      > div{
+        margin:0 9px;
+        &:first-child{
+          height: 40px;
+          background: #FAFAFA;
+          &::after{
+            display: none;
+          }
+        }
+        &.is-active,&.is-underlined{
+          background: #FAFAFA!important;
+          &::after{
+            display: none;
+          }
+        }
+        > div{
+          color:#212121;
+          order: 2;
+        }
+        input{
+          font-size: 16px;
+          order: 1;
+          height: 40px;
+        }
+        &:last-child{
+          margin-right: 9px;
+        }
+      }
+  }
+}
+
+
+@media only screen and (max-width: 480px) {
+  .searchBoxContainer {
+      display: flex;
+      align-items: center; // This centers the search box vertically
+      justify-content: center; // This aligns the search box to the right
+      padding: 15px;
+      height: 65px !important;
+  }
+}
+
+.appicontop {
+
+  padding: 15px;
+
+}
+
+.appIcon {
+  color: red;
+}
+
+.searchIcon {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 18px;
+  // Add additional styling as needed
+}
+
+.headerMenu{
+  display: flex;
+  align-items: center;
+  padding: 22px 22px 22px 18px;
+  &::before,&::after{
+    display: none;
+  }
+  @media(max-width:1024px){
+    padding: 12px 22px 12px 4px;
+  }
+  @media(max-width:640px){
+    padding: 0 0 12px;
+    > div{
+      padding: 0!important;
+    }
+  }
+}
+
+.headerMenuLogo{
+  padding: 0 5px 0 0!important;
+}

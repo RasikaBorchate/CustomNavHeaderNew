@@ -1,0 +1,28 @@
+.container {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    cursor: pointer;
+ 
+}
+
+
+.iconStylefront
+{
+    float: left;
+    font-weight: bold;
+    color: #65279a;
+    font-size: 8px;
+    padding-top: 7px;
+    margin-right: 15px;
+}
+
+.iconStyleback
+{
+    color: #043591;
+    float: right;
+    font-weight: 700;
+    position: absolute;
+    top: 0;
+    right: 20px;
+    padding: 14px;
+}

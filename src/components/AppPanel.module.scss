@@ -1,0 +1,197 @@
+/* AppPanel.module.scss */
+.appList {
+  padding: 10px;
+  overflow: auto;
+}
+
+*[class*="app-grid"]>div,
+.app-grid>div {
+  display: inline-block;
+  width: 50%;
+}
+
+.appItemGrid {
+  display: inline-block;
+  grid-template-columns: repeat(2, 1fr); /* Create two columns for grid view */
+  gap: 20px; /* Spacing between items */
+  width: 50%;
+}
+
+.appItemList {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-icon i{ 
+  font-size: 20px;
+  width: 20px;
+  color:#212121!important;
+  height: 20px;
+}
+.app-icon:hover i,.Add:hover i{
+  color:#212121!important;
+}
+.appItemList > div{
+  margin: 0 -5px;
+  padding-bottom: 12px;
+}
+
+.appItem {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.appIcon {
+  font-size: 24px; /* Size of app icons */
+  color: #666; /* Color of app icons */
+  margin-right: 12px; /* Spacing to the right of icons */
+}
+
+.appName {
+  font-size: 16px; /* Size of app names */
+  color: #333; /* Color of app names */
+  flex-grow: 1; /* Allow names to fill available space */
+}
+
+.editAppBtn,
+.deleteAppBtn {
+  margin-left: auto; /* Push buttons to the far right */
+  color: #ff4136; /* Red color for delete button */
+}
+
+// Media query for responsive design
+@media (max-width: 768px) {
+  .appItemGrid {
+    grid-template-columns: 1fr; /* Single column on small screens */
+  }
+}
+
+// Global button styles, if necessary
+button {
+  cursor: pointer;
+}
+
+.viewToggle {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.viewToggleButton {
+  margin-left: 5px;
+}
+
+// Hover effects
+button:hover,
+.appIcon:hover,
+.appName:hover {
+  opacity: 0.8;
+}
+.app-list{
+  max-height: calc(100vh - 160px);
+  overflow-y: auto;
+}
+.appitemsgrid{
+  margin: 0 -5px 8px;
+  .deleteAppBtn,.Add{
+    width: 50px!important;
+  }
+  .app-icon{
+    width: 40px;
+    height: 40px;
+    margin-right: 4px!important;
+  }
+  .app-name{
+    font-size: 13px;
+  }
+}
+.viewtogglebuttons {
+  padding-top: 8px;
+  margin-bottom: 18px;
+  display: block;
+}
+
+.panelappbutton{
+  padding: 9px 22px;
+  border-radius: 2px;
+  border:1px solid #DCDCDC;
+  font-size: 14px;
+  height: 40px;
+  min-width: 91px;
+  color:#000000!important;
+  background: none!important;
+  &:hover{
+    color:#ccc!important;
+    border:1px solid #ccc!important;
+  }
+}
+.deleteAppBtn{
+  border-color: #FAF8F8!important;
+  color:#FF0000;
+  background: #FAF8F8;
+  i{
+    font-size: 20px;
+  }
+  &:hover{
+    background: #FAF8F8;
+    i{
+      color:#FF0000;
+    }
+  }
+}
+.appModel{
+  > div:nth-child(2){
+    width: 465px!important;
+  }
+}
+.appsearchbox{
+  margin-bottom: 18px;
+  input{
+    background: #FAFAFA;
+    height: 40px;
+    display: block;
+    &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+      color: #333333;
+      opacity: 1;
+    }
+    &::-moz-placeholder { /* Firefox 19+ */
+      color: #333333;
+      opacity: 1;
+    }
+    &:-ms-input-placeholder { /* IE 10+ */
+      color: #333333;
+      opacity: 1;
+    }
+    &:-moz-placeholder { /* Firefox 18- */
+      color: #333333;
+      opacity: 1;
+    }
+  }
+  & > div{
+    border-bottom: 1px solid #000;
+    &::after{
+      display: none;
+    }
+    & > div{
+      height: 40px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .viewtogglebuttons {
+    display: none;
+  }
+}
+@media (max-width: 640px) {
+  .viewtogglebuttons {
+    display: none;
+  }
+}
+@media (max-width: 480px) {
+  .viewtogglebuttons {
+    display: none;
+  }
+}

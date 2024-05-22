@@ -1,0 +1,28 @@
+@import 'Common';
+
+.container {
+    
+    cursor: pointer;
+   position:fixed !important;
+    z-index:5000;
+    padding: 20px;
+    box-shadow: 10px 10px 15px rgba(128, 128, 128, 0.5);
+    background: #fff;
+
+    @include desktop {
+        padding-top: 30px;
+        padding-bottom: 30px;
+        position:fixed !important;
+        z-index:5000;
+    }
+  /*@include mobile { 
+        position: absolute; 
+        top: 100%; 
+        left: 0; 
+        width: 100%; 
+        box-shadow: none; 
+    }*/
+}
+.ms-SPLegacyFabricBlock .ms-Grid-col {
+    position: static; /* or 'relative' or 'absolute' */
+  }
