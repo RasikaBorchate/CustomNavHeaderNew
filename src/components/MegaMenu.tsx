@@ -91,7 +91,7 @@ export class MegaMenu extends React.Component<IMegaMenuProps, IMegaMenuState> {
     public render(): React.ReactElement<IMegaMenuProps> {
         const { responsiveMode, spfxContext, topLevelMenuItems } = this.props;
         const { showFlyout, selectedTopLevelItem, showTopLevelMenuItemsWhenMobile, isSearchBoxExpanded } = this.state;
-        const homeUrl = spfxContext._pageContext._web.absoluteUrl;
+        const homeUrl = "https://bmrn.sharepoint.com/sites/bioweb-home";
         const mobileMode = (responsiveMode ?? ResponsiveMode.large) < ResponsiveMode.large;
 
         const topLevelItems = topLevelMenuItems.map(item => (
@@ -126,20 +126,20 @@ export class MegaMenu extends React.Component<IMegaMenuProps, IMegaMenuState> {
         return (
             <div ref={this.megaMenuRef}>
                 {mobileMode && (
-                    <MobileMenu handleTouched={this.handleMobileMenuTouched} spfxContext={spfxContext} />
+                    <MobileMenu handleTouched={this.handleMobileMenuTouched} spfxContext={spfxContext} topLevelMenuItems={topLevelMenuItems} />
                 )}
 
-                {(!mobileMode || (mobileMode && showTopLevelMenuItemsWhenMobile)) && (
-                    <div className={`ms-Grid ms-slideDownIn10 ${styles.container}`}>
-                        <div className="ms-Grid-row">
+{(!mobileMode || showTopLevelMenuItemsWhenMobile) && (
+                    <div className={`ms-Grid ${mobileMode ? "ms-slideDownIn10" : ""} ${styles.container}`}>
+                        <div className={`ms-Grid-row ${styles.headerMenu}`}>
                             {!mobileMode && (
-                                <div className={`ms-Grid-col ms-lg2 ${styles.headerMenuLogo}`}>
+                             <div className={`ms-Grid-col ${styles.headerMenuLogo}`}>
                                     <a href={homeUrl} className={styles.logoHomeUrL}>
                                         <img src={require('../common/img/biomarin.svg')} alt="Biomarin" title="Biomarin" className={styles.logo} />
                                     </a>
                                 </div>
                             )}
-                            <div className={`ms-Grid-col ms-sm12 ms-md12 ms-lg5 ${styles.menuContainer}`} >
+                            <div className={`ms-Grid-col ms-sm12 ms-md12 ms-lg6`} >
                                 {topLevelItems}
                             </div>
                             {!mobileMode && (

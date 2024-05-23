@@ -8,6 +8,9 @@ import QuestionMarkIconWithTooltip from './QuestionMarkIconWithTooltip';
 import ChatbotIconWithTooltip from './ChatbotIconWithTooltip';
 import AppPanel from './AppPanel';
 import { spfi, SPFx } from "@pnp/sp";
+import { TopLevelMenu as TopLevelMenuModel } from '../model/TopLevelMenu';
+import { FlyoutColumn } from '../model/FlyoutColumn';
+import { Link } from '../model/Link'; // Import the Link class
 
 
 //import {WebPartContext} from '@microsoft/sp-webpart-base'
@@ -15,6 +18,7 @@ export interface IMobileMenuProps {
     handleTouched?: () => void;
     responsiveMode?: ResponsiveMode;
     spfxContext: any;
+    topLevelMenuItems: TopLevelMenuModel[];
 }
 
 export interface IMobileMenuState {
@@ -22,6 +26,7 @@ export interface IMobileMenuState {
     isFlyoutOpen: boolean;  // State for flyout visibility
     isSearchBoxExpanded: boolean;
     isSearchBoxVisible: boolean;
+    openSubMenu: { [key: string]: boolean }; // To keep track of open submenus
 }
 
 @withResponsiveMode
@@ -36,6 +41,7 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
             isFlyoutOpen: false,
             isSearchBoxExpanded: false,
             isSearchBoxVisible: false,
+            openSubMenu: {}
         };
     }
 
@@ -47,6 +53,16 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
             this.props.handleTouched();
         }
     };
+
+    toggleSubMenu = (menuId: string) => {
+        this.setState(prevState => ({
+            openSubMenu: {
+                ...prevState.openSubMenu,
+                [menuId]: !prevState.openSubMenu[menuId]
+            }
+        }));
+    };
+
 
     toggleFlyout = () => {
         this.setState(prevState => ({
@@ -78,10 +94,42 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
         }));
     };
 
-
+    renderSubMenu(columns: FlyoutColumn[], parentId: string) {
+        const { openSubMenu } = this.state;
+        return (
+            <ul className={styles.subMenu}>
+                {columns.map((column, columnIndex) => (
+                    <li key={`${parentId}-${columnIndex}`}>
+                        <div className={styles.subMenuItem} onClick={() => this.toggleSubMenu(`${parentId}-${columnIndex}`)}>
+                            {column.heading ? column.heading.text : 'Submenu'}
+                            {column.links && column.links.length > 0 && (
+                                <Icon iconName={openSubMenu[`${parentId}-${columnIndex}`] ? "ChevronUp" : "ChevronDown"} />
+                            )}
+                        </div>
+                        {column.links && openSubMenu[`${parentId}-${columnIndex}`] && (
+                            <ul className={styles.subMenu}>
+                                {column.links.map((link: Link) => (
+                                    <li key={link.text}>
+                                        <div className={styles.subMenuItem}>
+                                            <a href={link.url || '#'} target={link.openInNewTab ? "_blank" : "_self"}>{link.text}</a>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </li>
+                ))}
+            </ul>
+        );
+    }
     public render(): React.ReactElement<IMobileMenuProps> {
 
-
+        const { isMenuOpen,  isFlyoutOpen } = this.state;
+        const iconClassName = isMenuOpen ? "ms-Icon ms-Icon--Cancel" : "ms-Icon ms-Icon--GlobalNavButton";
+        const homeUrl = "https://bmrn.sharepoint.com/sites/bioweb-home";
+        const { topLevelMenuItems } = this.props;
+        const iconClassNameFlyout = isFlyoutOpen ? "ms-Icon ms-Icon--ChevronUpSmall" : "ms-Icon ms-Icon--More";
+       
 
         // Search box or icon based on state
         const searchElement = this.state.isSearchBoxExpanded ? (
@@ -105,18 +153,14 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
 
 
 
-        const { isMenuOpen, isFlyoutOpen } = this.state;
-        const iconClassName = isMenuOpen ? "ms-Icon ms-Icon--Cancel" : "ms-Icon ms-Icon--GlobalNavButton";
-        const iconClassNameFlyout = isFlyoutOpen ? "ms-Icon ms-Icon--ChevronUpSmall" : "ms-Icon ms-Icon--More";
-        const homeUrl = this.props.spfxContext._pageContext._web.absoluteUrl;
-        return (
+          return (
             <div className={`ms-Grid ${styles.container}`}>
                 <div  className={`ms-Grid-row ${styles.row}`}     >
                     <div className={`ms-Grid-col ms-sm1 ${styles.togglemenumobile}`}>
                         <i className={iconClassName } aria-hidden="true" style={{ cursor: 'pointer' }} onClick={this.toggleMenu} title='Toggle Navigation Pane' />
                     </div>
                     <div className={`ms-Grid-col ms-sm7 ${styles.logomobile}`} >
-                        <a href={homeUrl} className={styles1.logoHomeUrL}><img src={require('../common/img/logo.png')} alt="Biomarin" style={{ width: '120px', paddingTop:'8px', paddingLeft:'10px' }} /></a>
+                        <a href={homeUrl} className={styles1.logoHomeUrL}><img src={require('../common/img/biomarin.svg')} alt="Biomarin" style={{ width: '120px' }} /></a>
                     </div>
                     <div className={`ms-Grid-col ms-sm4 ${styles.righticonmobile}`} >
                         <i className={iconClassNameFlyout} aria-hidden="true" style={{ cursor: 'pointer' }} onClick={this.toggleFlyout} title='Toggle more' />
@@ -125,7 +169,24 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
 
 
                 </div>
-                {isFlyoutOpen && <div className={` ${styles.flyoutpanel}`} >
+                {isMenuOpen && (
+                    <div className={styles.menuPanel}>
+                        <ul className={styles.mainMenu}>
+                            {topLevelMenuItems.map(item => (
+                                <li key={item.id}>
+                                    <div className={styles.menuItem} onClick={() => this.toggleSubMenu(item.id.toString())}>
+                                        {item.text}
+                                        {item.columns && item.columns.length > 0 && (
+                                            <Icon iconName={this.state.openSubMenu[item.id.toString()] ? "ChevronUp" : "ChevronDown"} />
+                                        )}
+                                    </div>
+                                    {item.columns && this.state.openSubMenu[item.id.toString()] && this.renderSubMenu(item.columns, item.id.toString())}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+                {isFlyoutOpen  && <div className={` ${styles.flyoutpanel}`} >
                     <div className={`ms-Grid-col ms-sm12 ms-md12 ms-lg4 ${styles1.searchBoxContainer}`}>
                         {searchElement}
                         {!this.state.isSearchBoxExpanded && <QuestionMarkIconWithTooltip spfxContext={this.props.spfxContext} />}

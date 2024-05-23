@@ -1,14 +1,19 @@
 /* tslint:disable */
 require("./MobileMenu.module.css");
 const styles = {
-  container: 'container_36705fbd',
-  row: 'row_36705fbd',
-  togglemenumobile: 'togglemenumobile_36705fbd',
-  logomobile: 'logomobile_36705fbd',
-  righticonmobile: 'righticonmobile_36705fbd',
-  flyoutpanel: 'flyoutpanel_36705fbd',
-  'is-active': 'is-active_36705fbd',
-  'is-underlined': 'is-underlined_36705fbd'
+  container: 'container_d63ff6fd',
+  row: 'row_d63ff6fd',
+  togglemenumobile: 'togglemenumobile_d63ff6fd',
+  logomobile: 'logomobile_d63ff6fd',
+  righticonmobile: 'righticonmobile_d63ff6fd',
+  flyoutpanel: 'flyoutpanel_d63ff6fd',
+  'is-active': 'is-active_d63ff6fd',
+  'is-underlined': 'is-underlined_d63ff6fd',
+  menuPanel: 'menuPanel_d63ff6fd',
+  mainMenu: 'mainMenu_d63ff6fd',
+  subMenu: 'subMenu_d63ff6fd',
+  menuItem: 'menuItem_d63ff6fd',
+  subMenuItem: 'subMenuItem_d63ff6fd'
 };
 
 export default styles;

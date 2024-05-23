@@ -1,22 +1,22 @@
 /* tslint:disable */
 require("./MegaMenu.module.css");
 const styles = {
-  null: 'null_70fcae01',
-  container: 'container_70fcae01',
-  logoHomeUrL: 'logoHomeUrL_70fcae01',
-  logo: 'logo_70fcae01',
-  menuContainer: 'menuContainer_70fcae01',
-  searchBoxContainer: 'searchBoxContainer_70fcae01',
-  'ms-SearchBox': 'ms-SearchBox_70fcae01',
-  searchBoxWrapper: 'searchBoxWrapper_70fcae01',
-  'is-active': 'is-active_70fcae01',
-  searchBoxContent: 'searchBoxContent_70fcae01',
-  'is-underlined': 'is-underlined_70fcae01',
-  appicontop: 'appicontop_70fcae01',
-  appIcon: 'appIcon_70fcae01',
-  searchIcon: 'searchIcon_70fcae01',
-  headerMenu: 'headerMenu_70fcae01',
-  headerMenuLogo: 'headerMenuLogo_70fcae01'
+  null: 'null_ab1d879a',
+  container: 'container_ab1d879a',
+  logoHomeUrL: 'logoHomeUrL_ab1d879a',
+  logo: 'logo_ab1d879a',
+  menuContainer: 'menuContainer_ab1d879a',
+  searchBoxContainer: 'searchBoxContainer_ab1d879a',
+  'ms-SearchBox': 'ms-SearchBox_ab1d879a',
+  searchBoxWrapper: 'searchBoxWrapper_ab1d879a',
+  'is-active': 'is-active_ab1d879a',
+  searchBoxContent: 'searchBoxContent_ab1d879a',
+  'is-underlined': 'is-underlined_ab1d879a',
+  appicontop: 'appicontop_ab1d879a',
+  appIcon: 'appIcon_ab1d879a',
+  searchIcon: 'searchIcon_ab1d879a',
+  headerMenu: 'headerMenu_ab1d879a',
+  headerMenuLogo: 'headerMenuLogo_ab1d879a'
 };
 
 export default styles;

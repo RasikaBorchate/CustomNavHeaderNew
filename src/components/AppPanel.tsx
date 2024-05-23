@@ -9,6 +9,7 @@ import "@pnp/sp/webs";
 import "@pnp/sp/lists";
 import "@pnp/sp/items";
 import '@pnp/sp/site-users';
+
 import { API_URLS } from '../common/Config';
 export interface IAppPanelProps {
   spfxContext: any; // Consider using a specific type for context if available
@@ -225,75 +226,101 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
       this.fetchDefaultApps(); // Fetch default apps as a fallback
     }
   };
-  private saveUserPreferences = async (): Promise<void> => {
+
+
+  
+  // Save or Update Preferences
+  saveUserPreferences = async (): Promise<void> => {
     const userId = await this.getCurrentUserId();
     if (userId === -1) {
-      console.error("Unable to obtain valid user ID.");
-      return;
+        console.error("Invalid user ID");
+        return;
     }
-  
-    const preferencesToSave = JSON.stringify(this.state.selectedApps);
-    const listUrl = `${API_URLS.BASE_URL}/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items?$filter=UserIdId eq ${userId}`;
-    const requestDigestElement = document.getElementById("__REQUESTDIGEST") as HTMLInputElement;
-    const requestDigest = requestDigestElement ? requestDigestElement.value : '';
-    
-    try {
-      // Check if the preferences already exist
-      const checkResponse = await fetch(listUrl, {
+
+    // First, get the request digest
+    const digestUrl = `${API_URLS.BASE_URL}/_api/contextinfo`;
+    const digestResponse = await fetch(digestUrl, {
+        method: 'POST',
         headers: {
-          'Accept': 'application/json;odata=verbose',
-          'Content-Type': 'application/json;odata=verbose'
+            'Accept': 'application/json;odata=verbose',
+            'Content-Type': 'application/json;odata=verbose'
         },
         credentials: 'include'
-      });
-  
-      if (!checkResponse.ok) throw new Error(`Failed to fetch user preferences: ${checkResponse.statusText}`);
-  
-      const result = await checkResponse.json();
-      const items = result.d.results;
-  
-      if (items.length > 0) {
-        // Update existing preferences
-        const updateUrl = `${API_URLS.BASE_URL}/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items(${items[0].Id})`;
-        const updateResponse = await fetch(updateUrl, {
-          method: 'POST',
-          headers: {
+    });
+
+    if (!digestResponse.ok) {
+        console.error("Failed to fetch request digest");
+        return;
+    }
+
+    const digestResult = await digestResponse.json();
+    const requestDigest = digestResult.d.GetContextWebInformation.FormDigestValue;
+
+    const preferencesToSave = JSON.stringify(this.state.selectedApps);
+    const listUrl = `${API_URLS.BASE_URL}/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items?$filter=UserIdId eq ${userId}`;
+
+    const existingItemsResponse = await fetch(listUrl, {
+        headers: {
             'Accept': 'application/json;odata=verbose',
-            'Content-Type': 'application/json;odata=verbose',
-            'X-RequestDigest':requestDigest,
-            'X-HTTP-Method': 'MERGE',
-            'IF-MATCH': '*'
-          },
-          body: JSON.stringify({
-            Preferences: preferencesToSave
-          }),
-          credentials: 'include'
+            'Content-Type': 'application/json;odata=verbose'
+        },
+      
+    });
+
+    if (!existingItemsResponse.ok) {
+        console.error("Error checking existing preferences");
+        return;
+    }
+
+    const existingItems = await existingItemsResponse.json();
+    if (existingItems.d.results.length > 0) {
+        const itemId = existingItems.d.results[0].Id;
+        const updateUrl = `${API_URLS.BASE_URL}/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items(${itemId})`;
+        const updateResponse = await fetch(updateUrl, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json;odata=verbose',
+                'Content-Type': 'application/json;odata=verbose',
+                'X-RequestDigest': requestDigest,
+                'IF-MATCH': '*',
+                'X-HTTP-Method': 'MERGE'
+            },
+            body: JSON.stringify({ Preferences: preferencesToSave,
+              "__metadata": { "type": "SP.Data.BioWeb_x0020_Applications_x0020__x0020_User_x0020_PreferencesListItem" }
+             }),
+           
         });
-  
-        if (!updateResponse.ok) throw new Error(`Failed to update user preferences: ${updateResponse.statusText}`);
-      } else {
-        // Add new preferences
+
+        if (!updateResponse.ok) {
+            console.error("Failed to update user preferences:", updateResponse.statusText);
+            return;
+        }
+        console.log("Preferences updated successfully.");
+    } else {
         const addUrl = `${API_URLS.BASE_URL}/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items`;
         const addResponse = await fetch(addUrl, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json;odata=verbose',
-            'Content-Type': 'application/json;odata=verbose',
-            'X-RequestDigest': requestDigest
-          },
-          body: JSON.stringify({
-            UserIdId: userId,
-            Preferences: preferencesToSave
-          }),
-          credentials: 'include'
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json;odata=verbose',
+                'Content-Type': 'application/json;odata=verbose',
+                'X-RequestDigest': requestDigest
+            },
+            body: JSON.stringify({
+                UserIdId: userId,
+                Preferences: preferencesToSave,
+                "__metadata": { "type": "SP.Data.BioWeb_x0020_Applications_x0020__x0020_User_x0020_PreferencesListItem" }
+            }),
+            credentials: 'include'
         });
-  
-        if (!addResponse.ok) throw new Error(`Failed to add new user preferences: ${addResponse.statusText}`);
-      }
-    } catch (error) {
-      console.error("Error saving user preferences:", error);
+
+        if (!addResponse.ok) {
+            console.error("Failed to add new user preferences:", addResponse.statusText);
+            return;
+        }
+        console.log("Preferences saved successfully.");
     }
-  };
+};
+
   
   onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
@@ -517,10 +544,11 @@ styles={{
       contentToShow = (
         <Stack horizontal styles={appstackStyles}>
           <Stack.Item grow={3} styles={appstackItemStyles}>
-            <p style={{ fontSize: '14px', padding: '20px 30px'  }}>You have not added</p>
+            <p style={{ fontSize: '14px', padding: '20px 30px' }}>You have not added<br></br> 
+            any applications yet</p>
           </Stack.Item>
           <Stack.Item grow={3} styles={appstackItemStyles}>
-            <img src={require('../common/img/appicon.png')} alt="app icon" style={{ maxWidth: 'auto' }} />
+            <img src={require('../common/img/appicon.png')} alt="app icon" style={{ marginTop: 'auto' }} />
           </Stack.Item>
         </Stack>
       );

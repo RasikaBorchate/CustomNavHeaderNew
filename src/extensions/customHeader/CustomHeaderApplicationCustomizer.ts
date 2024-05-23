@@ -36,6 +36,8 @@ export default class CustomHeaderApplicationCustomizer
   
         MegaMenuService.runListprovision(this.context).then((response) => {
           MegaMenuService.getMenuItems("https://conais.sharepoint.com/sites/SPFXDEV/")
+         //MegaMenuService.getMenuItems("https://bmrn.sharepoint.com/sites/bioweb-home/")
+         
             .then((topLevelMenus: TopLevelMenu[]) => {
               const element: React.ReactElement<IMegaMenuProps> = React.createElement(
                 MegaMenu,

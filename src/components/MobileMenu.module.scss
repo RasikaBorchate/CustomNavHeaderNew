@@ -1,7 +1,8 @@
 .container {
     padding-top: 5px;
     padding-bottom: 5px;
-
+    position: relative;
+    z-index: 1000;
     .row {
         padding: 10px;
         justify-content: flex-end;
@@ -78,12 +79,43 @@
         z-index: 1000;
         box-shadow: 10px 10px 15px rgba(128, 128, 128, 0.5);
         box-sizing: border-box;
-        > div{
-        }
+       
         .is-active,
         .is-underlined{
             background: #FAFAFA;
         }
     }
 
+    .menuPanel {
+        background-color: #fff;
+        border-top: 1px solid #ccc;
+        padding: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        position: absolute;
+        top: 60px;
+        width: 100%;
+    }
+    
+    .mainMenu, .subMenu {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    
+    .menuItem, .subMenuItem {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+        cursor: pointer;
+    }
+    
+    .menuItem:hover, .subMenuItem:hover {
+        background-color: #f0f0f0;
+    }
+    
+    .subMenu {
+        padding-left: 20px;
+    }
+    
 }
