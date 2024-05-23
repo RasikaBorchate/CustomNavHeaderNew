@@ -26,6 +26,7 @@ export interface IMobileMenuState {
     isSearchBoxVisible: boolean;
     openSubMenu: { [key: string]: boolean };
     selectedMenuItem: string | null; // Track the selected menu item
+    selectedSubMenuItem: string | null; // Track the selected sub-menu item
 }
 
 @withResponsiveMode
@@ -38,7 +39,8 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
         isSearchBoxExpanded: false,
         isSearchBoxVisible: false,
         openSubMenu: {},
-        selectedMenuItem: null // Initialize with no selected menu item
+        selectedMenuItem: null, // Initialize with no selected menu item
+        selectedSubMenuItem: null // Initialize with no selected sub-menu item
     };
 
     constructor(props: IMobileMenuProps) {
@@ -58,7 +60,8 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
                 ...prevState.openSubMenu,
                 [menuId]: !prevState.openSubMenu[menuId]
             },
-            selectedMenuItem: prevState.selectedMenuItem === menuId ? null : menuId // Toggle selected menu item
+            selectedMenuItem: prevState.selectedMenuItem === menuId ? null : menuId, // Toggle selected menu item
+            selectedSubMenuItem: null // Reset selected sub-menu item when toggling main menu item
         }));
     };
 
@@ -87,8 +90,14 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
         }));
     };
 
+    selectSubMenuItem = (subMenuItemId: string) => {
+        this.setState({
+            selectedSubMenuItem: subMenuItemId
+        });
+    };
+
     renderSubMenu(columns: FlyoutColumn[], parentId: string) {
-        const { openSubMenu } = this.state;
+        const { openSubMenu, selectedSubMenuItem } = this.state;
         return (
             <ul className={styles.subMenu}>
                 {columns.map((column, columnIndex) => (
@@ -101,9 +110,13 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
                         </div>
                         {column.links && openSubMenu[`${parentId}-${columnIndex}`] && (
                             <ul className={styles.subsubMenu}>
-                                {column.links.map((link: Link) => (
+                                {column.links.map((link: Link, linkIndex) => (
                                     <li key={link.text}>
-                                        <div className={styles.subsubMenuItem}>
+                                        <div
+                                            className={styles.subsubMenuItem}
+                                            onClick={() => this.selectSubMenuItem(`${parentId}-${columnIndex}-${linkIndex}`)}
+                                            style={{ backgroundColor: selectedSubMenuItem === `${parentId}-${columnIndex}-${linkIndex}` ? '#eef6f7' : 'transparent' }}
+                                        >
                                             <a href={link.url || '#'} target={link.openInNewTab ? "_blank" : "_self"}>{link.text}</a>
                                         </div>
                                     </li>
@@ -117,7 +130,7 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
     }
 
     public render(): React.ReactElement<IMobileMenuProps> {
-        const { isMenuOpen, isFlyoutOpen, isSearchBoxExpanded, selectedMenuItem } = this.state;
+        const { isMenuOpen, isFlyoutOpen, isSearchBoxExpanded, selectedMenuItem, selectedSubMenuItem } = this.state;
         const iconClassName = isMenuOpen ? "ms-Icon ms-Icon--Cancel" : "ms-Icon ms-Icon--GlobalNavButton";
         const homeUrl = "https://bmrn.sharepoint.com/sites/bioweb-home";
         const { topLevelMenuItems } = this.props;
@@ -156,21 +169,25 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
                 {isMenuOpen && (
                     <div className={styles.menuPanel}>
                         <ul className={styles.mainMenu}>
-                            {topLevelMenuItems.map(item => (
-                                <li key={item.id}>
-                                    <div
-                                        className={`${styles.menuItem} ${selectedMenuItem === item.id.toString() ? styles.selectedMenuItem : ''}`}
-                                        onClick={() => this.toggleSubMenu(item.id.toString())}
-                                    >
-                                        <Icon iconName="CircleFill" className={styles.iconStylefront} />
-                                        {item.text}
-                                        {selectedMenuItem === item.id.toString() && (
-                                            <Icon iconName="AcceptMedium" className={styles.iconStyleback} />
-                                        )}
-                                    </div>
-                                    {item.columns && this.state.openSubMenu[item.id.toString()] && this.renderSubMenu(item.columns, item.id.toString())}
-                                </li>
-                            ))}
+                            {topLevelMenuItems.map(item => {
+                                const isSelected = selectedMenuItem === item.id.toString() || (selectedSubMenuItem && selectedSubMenuItem.startsWith(item.id.toString()));
+                                return (
+                                    <li key={item.id}>
+                                        <div
+                                            className={styles.menuItem}
+                                            onClick={() => this.toggleSubMenu(item.id.toString())}
+                                            style={{ backgroundColor: isSelected ? '#eef6f7' : 'transparent' }}
+                                        >
+                                            <Icon iconName="CircleFill" className={styles.iconStylefront} />
+                                            {item.text}
+                                            {isSelected && (
+                                                <Icon iconName="AcceptMedium" className={styles.iconStyleback} />
+                                            )}
+                                        </div>
+                                        {item.columns && this.state.openSubMenu[item.id.toString()] && this.renderSubMenu(item.columns, item.id.toString())}
+                                    </li>
+                                );
+                            })}
                         </ul>
                     </div>
                 )}
