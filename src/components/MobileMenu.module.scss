@@ -3,6 +3,7 @@
     padding-bottom: 5px;
     position: relative;
     z-index: 1000;
+
     .row {
         padding: 10px;
         justify-content: flex-end;
@@ -15,10 +16,10 @@
             cursor: pointer;
             margin-left: -1px;
             padding-left: 0px;
-            flex:0 0 40px;
+            flex: 0 0 40px;
             max-width: 40px;
-            width: 40px;
             padding-right: 0;
+
             i {
                 background: #fff;
                 padding: 10px;
@@ -36,11 +37,12 @@
 
         .logomobile {
             text-align: left;
-            cursor: pointer; 
+            cursor: pointer;
             padding: 0;
             margin-left: -2px;
             width: 59.333333%;
-            @media(max-width:539px){
+
+            @media(max-width:539px) {
                 width: 57.333333%;
             }
         }
@@ -79,43 +81,136 @@
         z-index: 1000;
         box-shadow: 10px 10px 15px rgba(128, 128, 128, 0.5);
         box-sizing: border-box;
-       
+
         .is-active,
-        .is-underlined{
-            background: #FAFAFA;
+        .is-underlined {
+            background: #eef6f7;
         }
     }
 
     .menuPanel {
-        background-color: #fff;
-        border-top: 1px solid #ccc;
-        padding: 10px;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        position: absolute;
-        top: 60px;
+
+        box-shadow: 0 4px 8px rgba(0, 0, 0, .1);
         width: 100%;
+        background: #ffff;
+        position: absolute;
+        left: 0px;
+        top: 66px;
     }
-    
-    .mainMenu, .subMenu {
+
+    .mainMenu {
         list-style-type: none;
         padding-left: 0;
+        margin: 0px;
+        padding: 0px;
     }
-    
-    .menuItem, .subMenuItem {
-        display: flex;
+
+
+    .subsubMenu {
+        list-style-type: none;
+        padding-left: 0;
+        margin: 0px;
+        padding: 0px;
+    }
+    .selectedMenuItem {
+        background-color: #eef6f7;
+    }
+
+    .menuItem {
+        display: block;
         justify-content: space-between;
         align-items: center;
-        padding: 10px;
-        border-bottom: 1px solid #ccc;
+        padding: 15px;
+        font-size: 16px;
+        font-weight: 600;
+
         cursor: pointer;
+
+
+
+        .iconStylefront {
+            float: left;
+            font-weight: bold;
+            color: #65279a;
+            font-size: 8px;
+            padding-top: 7px;
+            margin-right: 15px;
+        }
+
+        .iconStyleback {
+            color: #043591;
+            position: absolute;
+            right: 25px;
+            font-size: 20px;
+            font-weight: bold;
+
+        }
+
+
+
+
+
     }
-    
-    .menuItem:hover, .subMenuItem:hover {
+
+
+    .subMenuItem {
+
+        padding: 8px 13px;
+        cursor: pointer;
+
+        .subMenuItemicon {
+            font-weight: bold;
+
+        }
+
+        .subMenuItemtext {
+            margin-left: 11px;
+            font-size: 14px;
+        }
+    }
+
+
+
+    .subsubMenuItem {
+
+        padding: 8px 40px;
+        cursor: pointer;
+
+        a
+        {
+            text-decoration: none !important;
+            color: #444 !important;
+        }
+
+        .subMenuItemicon {
+            font-weight: bold;
+
+        }
+
+        .subMenuItemtext {
+            margin-left: 11px;
+            font-size: 14px;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    .menuItem:hover,
+    .subMenuItem:hover {
         background-color: #f0f0f0;
     }
-    
+
     .subMenu {
-        padding-left: 20px;
+        padding-left: 0px;
     }
-    
+
 }
