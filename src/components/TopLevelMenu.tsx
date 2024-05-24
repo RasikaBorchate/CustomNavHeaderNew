@@ -50,7 +50,7 @@ export class TopLevelMenu extends React.Component<ITopLevelMenuProps, ITopLevelM
                     ms-Grid-col
                     ${isSelected ? "ms-bgColor-themeLighterAlt" : ""}
                     ms-textAlignLeft
-                    ms-fontSize-l
+                    ms-fontSize-m
                     ${isSelected ? "ms-fontColor-neutralPrimary" : "ms-fontColor-neutralPrimaryAlt"}
                     ${styles.container}
                 `}
