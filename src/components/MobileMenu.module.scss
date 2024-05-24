@@ -132,19 +132,20 @@
         display: block;
         justify-content: space-between;
         align-items: center;
-        padding: 13px 50px 14px 21px;
+        padding: 13px 50px 14px 56px;
         font-size: 16px;
         font-weight: 600;
+        position: relative;
         color:#3C3C3C;
         cursor: pointer;
 
         .iconStylefront {
-            float: left;
+            position: absolute;
+            top: 19px;
+            left: 20px;
             font-weight: bold;
             color: #65279a;
             font-size: 8px;
-            padding-top: 7px;
-            margin-right: 27px;
         }
 
         .iconStyleback {
@@ -159,18 +160,19 @@
 
     .subMenuItem {
 
-        padding: 11px 18px 10px;
+        padding: 11px 18px 10px 56px;
         font-size: 14px;
         font-weight: 400;
+        position: relative;
         cursor: pointer;
 
         .subMenuItemicon {
-            font-weight: bold;
-
+            position: absolute;
+            left: 18px;
+            top: 14px;
         }
 
         .subMenuItemtext {
-            margin-left: 25px;
             font-size: 14px;
         }
     }
@@ -179,7 +181,7 @@
 
     .subsubMenuItem {
 
-        padding: 10.5px 23px 10.5px 57px;
+        padding: 10.5px 23px 10.5px 56px;
         cursor: pointer;
 
         a
