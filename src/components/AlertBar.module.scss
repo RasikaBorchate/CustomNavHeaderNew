@@ -1,28 +1,61 @@
 .Alertcontainer {
-    background: linear-gradient(to right, #053591 0%, #c81e9d 100%);
+    background: #60269E;
     color: white;
-    padding: 10px;
+    width: auto;
+    padding: 22px 27px;
     position: relative;
-    font-family: Arial, sans-serif;
-
-
-
-
+    font-family:"Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+    > div{
+        align-items: center;
+        div:first-child{
+            margin:0 20px 0 0;
+            i{
+                background-image: url("data:image/svg+xml,%0A%3Csvg width='45' height='44' viewBox='0 0 45 44' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M23.4186 14.5C23.4186 15.3284 22.7526 16 21.931 16C21.1094 16 20.4434 15.3284 20.4434 14.5C20.4434 13.6716 21.1094 13 21.931 13C22.7526 13 23.4186 13.6716 23.4186 14.5Z' fill='white'/%3E%3Cpath d='M20.8154 18.625V26.125C20.8154 26.7463 21.315 27.25 21.9311 27.25C22.5473 27.25 23.0468 26.7463 23.0468 26.125V18.625C23.0468 18.0037 22.5473 17.5 21.9311 17.5C21.315 17.5 20.8154 18.0037 20.8154 18.625Z' fill='white'/%3E%3Cpath d='M9.6582 10.75C9.6582 8.67894 11.3233 7 13.3772 7H30.4846C32.5386 7 34.2037 8.67894 34.2037 10.75V32.125C34.2037 32.7463 33.7041 33.25 33.088 33.25H11.8896C11.8896 34.0784 12.5556 34.75 13.3772 34.75H33.088C33.7041 34.75 34.2037 35.2537 34.2037 35.875C34.2037 36.4963 33.7041 37 33.088 37H13.3772C11.3233 37 9.6582 35.3211 9.6582 33.25V10.75ZM31.9723 31V10.75C31.9723 9.92158 31.3063 9.25 30.4846 9.25H13.3772C12.5556 9.25 11.8896 9.92158 11.8896 10.75V31H31.9723Z' fill='white'/%3E%3C/svg%3E%0A");
+                width: 45px;
+                height: 44px;
+                font-size: 0;
+                display: inline-block;
+                margin: 0!important;
+            }
+        }
+        div:nth-child(2){
+            padding-right: 50px;
+            margin: 0;
+            span > span{
+                white-space: normal;
+            }
+        }
+        div:nth-child(3){
+            button{
+                position: absolute;
+                top:50%;
+                right: 20px;
+                transform: translateY(-50%);
+                background-image: url("data:image/svg+xml,%0A%3Csvg width='45' height='44' viewBox='0 0 45 44' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15.3037 15.2822L28.7387 28.7173' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M15.3037 28.7178L28.7387 15.2827' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E%0A");
+                width: 45px;
+                height: 44px;
+                opacity: 1;
+                transition: opacity .4s linear;
+                &:hover{
+                    opacity: 0.6;
+                }
+            }
+        }
+    }
     *[class*="icon"],
     .icon {
-       
         color: #fff;
         font-size: 20px;
         font-weight: bold;
-        margin-right: 10px;
-
     }
-
-
-
     p {
         margin: 0;
-        font-size: 16px;
-
+        font-size: 14px;
+    }
+    @media(max-width:1024px){
+        padding: 18px 15px;
+    }
+    @media(max-width:767px){
+        padding: 15px;
     }
 }
