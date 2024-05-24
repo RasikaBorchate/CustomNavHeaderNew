@@ -565,7 +565,7 @@ styles={{
         </div>
 
         <Panel
-          className={styles.appModel}
+          
           isOpen={showPanel}
           type={PanelType.medium}
           onDismiss={this._closePanel}  // Use _closePanel here

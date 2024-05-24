@@ -1,9 +1,9 @@
 /* tslint:disable */
 require("./TopLevelMenu.module.css");
 const styles = {
-  container: 'container_25444dac',
-  iconStylefront: 'iconStylefront_25444dac',
-  iconStyleback: 'iconStyleback_25444dac'
+  container: 'container_d83eeef2',
+  iconStylefront: 'iconStylefront_d83eeef2',
+  iconStyleback: 'iconStyleback_d83eeef2'
 };
 
 export default styles;

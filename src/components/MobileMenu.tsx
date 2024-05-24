@@ -95,10 +95,22 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
             selectedSubMenuItem: subMenuItemId
         });
     };
+
     handleChatbotClick = () => {
         console.log('Chatbot icon clicked');
         // Add any logic here that should execute when the Chatbot icon is clicked
-      }
+    };
+    handleTopLevelItemClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, item: TopLevelMenuModel) => {
+        if (item.url) {
+            // If the item has a URL, let the link be followed
+            return;
+        } else {
+            // If the item does not have a URL, prevent the link and expand the menu
+            event.preventDefault();
+            this.toggleSubMenu(item.id.toString());
+        }
+    };
+
     renderSubMenu(columns: FlyoutColumn[], parentId: string) {
         const { openSubMenu, selectedSubMenuItem } = this.state;
         return (
@@ -120,7 +132,7 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
                                             onClick={() => this.selectSubMenuItem(`${parentId}-${columnIndex}-${linkIndex}`)}
                                             style={{ backgroundColor: selectedSubMenuItem === `${parentId}-${columnIndex}-${linkIndex}` ? '#eef6f7' : 'transparent' }}
                                         >
-                                            <a href={link.url || '#'} target={link.openInNewTab ? "_blank" : "_self"}>{link.text}</a>
+                                            <a href={link.url} target={link.openInNewTab ? "_blank" : "_self"}>{link.text}</a>
                                         </div>
                                     </li>
                                 ))}
@@ -176,17 +188,22 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
                                 const isSelected = selectedMenuItem === item.id.toString() || (selectedSubMenuItem && selectedSubMenuItem.startsWith(item.id.toString()));
                                 return (
                                     <li key={item.id}>
-                                        <div
-                                            className={styles.menuItem}
-                                            onClick={() => this.toggleSubMenu(item.id.toString())}
-                                            style={{ backgroundColor: isSelected ? '#eef6f7' : 'transparent' }}
+                                        <a
+                                            href={item.url}
+                                            target={"_blank" }
+                                            onClick={(event) => this.handleTopLevelItemClick(event, item)} style={{textDecoration:"none"}}
                                         >
-                                            <Icon iconName="CircleFill" className={styles.iconStylefront} />
-                                           {item.text}
-                                            {isSelected && (
-                                                <Icon iconName="AcceptMedium" className={styles.iconStyleback} />
-                                            )}
-                                        </div>
+                                            <div
+                                                className={styles.menuItem}
+                                                style={{ backgroundColor: isSelected ? '#eef6f7' : 'transparent' }}
+                                            >
+                                                <Icon iconName="CircleFill" className={styles.iconStylefront} />
+                                                {item.text}
+                                                {isSelected && (
+                                                    <Icon iconName="AcceptMedium" className={styles.iconStyleback} />
+                                                )}
+                                            </div>
+                                        </a>
                                         {item.columns && this.state.openSubMenu[item.id.toString()] && this.renderSubMenu(item.columns, item.id.toString())}
                                     </li>
                                 );
@@ -199,7 +216,7 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
                         <div className={`ms-Grid-col ms-sm12 ms-md12 ms-lg4 ${styles1.searchBoxContainer}`}>
                             {searchElement}
                             {!isSearchBoxExpanded && <QuestionMarkIconWithTooltip spfxContext={this.props.spfxContext} />}
-                            {!isSearchBoxExpanded && <ChatbotIconWithTooltip  onClick={this.handleChatbotClick} />}
+                            {!isSearchBoxExpanded && <ChatbotIconWithTooltip onClick={this.handleChatbotClick} />}
                             {!isSearchBoxExpanded && <AppPanel spfxContext={this.props.spfxContext} />}
                         </div>
                     </div>
