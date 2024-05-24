@@ -4,7 +4,7 @@
   "https": true,
   "serveConfigurations": {
     "default": {
-      "pageUrl": "https://conais.sharepoint.com/sites/SPFXDEV/SitePages/test.aspx",
+      "pageUrl": "https://abcloudz.sharepoint.com/sites/AppCatalog2/SitePages/test.aspx",
       "customActions": {
         "ab68a11b-c5ea-4d3b-86e9-b02d9060e8fd": {
           "location": "ClientSideExtension.ApplicationCustomizer",
@@ -15,7 +15,7 @@
       }
     },
     "customHeader": {
-      "pageUrl": "https://conais.sharepoint.com/sites/SPFXDEV/SitePages/test.aspx",
+      "pageUrl": "https://abcloudz.sharepoint.com/sites/AppCatalog2/SitePages/test.aspx",
       "customActions": {
         "ab68a11b-c5ea-4d3b-86e9-b02d9060e8fd": {
           "location": "ClientSideExtension.ApplicationCustomizer",
