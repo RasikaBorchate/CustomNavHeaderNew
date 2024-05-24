@@ -144,6 +144,12 @@ button:hover,
 .appModel{
   > div:nth-child(2){
     width: 465px!important;
+    @media(max-width:479px){
+      width: 380px;
+    }
+    @media(max-width:390px){
+      width: 300px;
+    }
   }
 }
 .appsearchbox{
