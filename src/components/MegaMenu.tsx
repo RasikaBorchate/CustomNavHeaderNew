@@ -12,6 +12,7 @@ import AppPanel from './AppPanel';
 import { Search20Regular } from '@fluentui/react-icons';
 import { spfi, SPFx } from "@pnp/sp";
 import AlertBar from './AlertBar';
+import ChatBot from './ChatBot/ChatBot';
 
 export interface IMegaMenuProps {
     topLevelMenuItems: TopLevelMenuModel[];
@@ -27,6 +28,7 @@ export interface IMegaMenuState {
     showTopLevelMenuItemsWhenMobile: boolean;
     isSearchBoxVisible: boolean;
     isSearchBoxExpanded: boolean;
+    isChatbotOpen:boolean;
 }
 
 @withResponsiveMode
@@ -48,11 +50,14 @@ export class MegaMenu extends React.Component<IMegaMenuProps, IMegaMenuState> {
             showTopLevelMenuItemsWhenMobile: false,
             isSearchBoxVisible: false,
             isSearchBoxExpanded: false,
+            isChatbotOpen: false, // Initialize ChatBot closed
         };
 
         this.handleToggleTopLevelMenu = this.handleToggleTopLevelMenu.bind(this);
         this.handleMobileMenuTouched = this.handleMobileMenuTouched.bind(this);
         this.handleOutsideClick = this.handleOutsideClick.bind(this);
+        this.handleChatbotClick = this.handleChatbotClick.bind(this); // Bind the new method
+ 
     }
 
     componentDidMount() {
@@ -87,7 +92,12 @@ export class MegaMenu extends React.Component<IMegaMenuProps, IMegaMenuState> {
             isSearchBoxExpanded: !prevState.isSearchBoxExpanded
         }));
     }
-
+    handleChatbotClick() {
+        this.setState(prevState => ({
+            isChatbotOpen: !prevState.isChatbotOpen
+        }));
+        console.log('Chatbot toggle triggered');
+    }
     public render(): React.ReactElement<IMegaMenuProps> {
         const { responsiveMode, spfxContext, topLevelMenuItems } = this.props;
         const { showFlyout, selectedTopLevelItem, showTopLevelMenuItemsWhenMobile, isSearchBoxExpanded } = this.state;
@@ -149,7 +159,9 @@ export class MegaMenu extends React.Component<IMegaMenuProps, IMegaMenuState> {
                                         <QuestionMarkIconWithTooltip spfxContext={this.props.spfxContext} />
                                     </div>
                                     <div className='ms-Grid-item'>
-                                        <ChatbotIconWithTooltip />
+                                        <ChatbotIconWithTooltip  onClick={this.handleChatbotClick} />
+                                        {this.state.isChatbotOpen && <ChatBot isOpen={this.state.isChatbotOpen} onToggleChat={this.handleChatbotClick} />}
+       
                                     </div>
                                     <div className='ms-Grid-item'>
                                         <AppPanel spfxContext={this.props.spfxContext} />

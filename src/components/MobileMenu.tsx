@@ -95,7 +95,10 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
             selectedSubMenuItem: subMenuItemId
         });
     };
-
+    handleChatbotClick = () => {
+        console.log('Chatbot icon clicked');
+        // Add any logic here that should execute when the Chatbot icon is clicked
+      }
     renderSubMenu(columns: FlyoutColumn[], parentId: string) {
         const { openSubMenu, selectedSubMenuItem } = this.state;
         return (
@@ -179,7 +182,7 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
                                             style={{ backgroundColor: isSelected ? '#eef6f7' : 'transparent' }}
                                         >
                                             <Icon iconName="CircleFill" className={styles.iconStylefront} />
-                                            {item.text}
+                                           {item.text}
                                             {isSelected && (
                                                 <Icon iconName="AcceptMedium" className={styles.iconStyleback} />
                                             )}
@@ -196,7 +199,7 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
                         <div className={`ms-Grid-col ms-sm12 ms-md12 ms-lg4 ${styles1.searchBoxContainer}`}>
                             {searchElement}
                             {!isSearchBoxExpanded && <QuestionMarkIconWithTooltip spfxContext={this.props.spfxContext} />}
-                            {!isSearchBoxExpanded && <ChatbotIconWithTooltip />}
+                            {!isSearchBoxExpanded && <ChatbotIconWithTooltip  onClick={this.handleChatbotClick} />}
                             {!isSearchBoxExpanded && <AppPanel spfxContext={this.props.spfxContext} />}
                         </div>
                     </div>
