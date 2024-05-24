@@ -102,7 +102,7 @@ export class MegaMenu extends React.Component<IMegaMenuProps, IMegaMenuState> {
         const { responsiveMode, spfxContext, topLevelMenuItems } = this.props;
         const { showFlyout, selectedTopLevelItem, showTopLevelMenuItemsWhenMobile, isSearchBoxExpanded } = this.state;
         const homeUrl = "https://bmrn.sharepoint.com/sites/bioweb-home";
-        const mobileMode = (responsiveMode ?? ResponsiveMode.large) < ResponsiveMode.large;
+        const mobileMode = (responsiveMode ?? ResponsiveMode.xLarge) < ResponsiveMode.xLarge;
 
         const topLevelItems = topLevelMenuItems.map(item => (
             <TopLevelMenu

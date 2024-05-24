@@ -76,7 +76,9 @@
                 border-radius: 5px;
             }
             @media(max-width:639px){
-                right: 5px;
+                right: 23px;
+                position: absolute;
+                top: 15px;
             }
         }
     }
@@ -210,7 +212,7 @@
 
     .menuItem:hover,
     .subMenuItem:hover {
-        background-color: #f0f0f0;
+        background-color: rgb(238, 246, 247);
     }
 
     .subMenu {
