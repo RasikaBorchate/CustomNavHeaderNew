@@ -75,8 +75,8 @@ export class MegaMenu extends React.Component<IMegaMenuProps, IMegaMenuState> {
     }
 
     onSearch = (searchTerm: string): void => {
-        const searchVerticalIdentifier = 'BIO_WEB_SEARCH_VERTICAL_ID';
-        const searchBaseUrl = `/_layouts/15/search.aspx/siteall`;
+        const searchVerticalIdentifier = '%2Fsearch%2F1715802103063_15hccvoyq';
+        const searchBaseUrl = `https://bmrn.sharepoint.com/_layouts/15/sharepoint.aspx?`;
 
         const queryParams = new URLSearchParams({
             q: searchTerm,

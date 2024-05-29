@@ -215,12 +215,12 @@
 .headerMenu{
   display: flex;
   align-items: center;
-  padding: 22px 22px 22px 18px;
+  padding: 2px;
   &::before,&::after{
     display: none;
   }
   @media(max-width:1024px){
-    padding: 12px 22px 12px 4px;
+    padding: 2px;
   }
   @media(max-width:640px){
     padding: 0 0 12px;

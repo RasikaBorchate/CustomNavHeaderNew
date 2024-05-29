@@ -24,6 +24,7 @@ export interface IMobileMenuState {
     isFlyoutOpen: boolean;
     isSearchBoxExpanded: boolean;
     isSearchBoxVisible: boolean;
+    isAppPanelOpen: boolean;
     openSubMenu: { [key: string]: boolean };
     selectedMenuItem: string | null;
     selectedSubMenuItem: string | null;
@@ -39,6 +40,7 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
         isFlyoutOpen: false,
         isSearchBoxExpanded: false,
         isSearchBoxVisible: false,
+        isAppPanelOpen: false,
         openSubMenu: {},
         selectedMenuItem: null,
         selectedSubMenuItem: null
@@ -64,7 +66,8 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
                 isMenuOpen: false,
                 isFlyoutOpen: false,
                 isSearchBoxExpanded: false,
-                isSearchBoxVisible: false
+                isSearchBoxVisible: false,
+                isAppPanelOpen: false
             });
         }
     };
@@ -74,7 +77,8 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
             isMenuOpen: !prevState.isMenuOpen,
             isFlyoutOpen: prevState.isMenuOpen ? prevState.isFlyoutOpen : false,
             isSearchBoxExpanded: false,
-            isSearchBoxVisible: false
+            isSearchBoxVisible: false,
+            isAppPanelOpen: false
         }));
     };
 
@@ -94,13 +98,14 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
             isFlyoutOpen: !prevState.isFlyoutOpen,
             isMenuOpen: prevState.isFlyoutOpen ? prevState.isMenuOpen : false,
             isSearchBoxExpanded: false,
-            isSearchBoxVisible: false
+            isSearchBoxVisible: false,
+            isAppPanelOpen: false
         }));
     };
 
     onSearch = (searchTerm: string): void => {
-        const searchVerticalIdentifier = 'BIO_WEB_SEARCH_VERTICAL_ID';
-        const searchBaseUrl = `/_layouts/15/search.aspx/siteall`;
+        const searchVerticalIdentifier = '%2Fsearch%2F1715802103063_15hccvoyq';
+        const searchBaseUrl = `https://bmrn.sharepoint.com/_layouts/15/sharepoint.aspx?`;
 
         const queryParams = new URLSearchParams({
             q: searchTerm,
@@ -114,6 +119,16 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
         this.setState(prevState => ({
             isSearchBoxVisible: !prevState.isSearchBoxVisible,
             isSearchBoxExpanded: !prevState.isSearchBoxExpanded
+        }));
+    };
+
+    toggleAppPanel = () => {
+        this.setState(prevState => ({
+            isAppPanelOpen: !prevState.isAppPanelOpen,
+            isMenuOpen: false,
+            isFlyoutOpen: false,
+            isSearchBoxExpanded: false,
+            isSearchBoxVisible: false
         }));
     };
 
@@ -177,7 +192,7 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
     }
 
     public render(): React.ReactElement<IMobileMenuProps> {
-        const { isMenuOpen, isFlyoutOpen, isSearchBoxExpanded, selectedMenuItem, selectedSubMenuItem } = this.state;
+        const { isMenuOpen, isFlyoutOpen, isSearchBoxExpanded, isAppPanelOpen, selectedMenuItem, selectedSubMenuItem } = this.state;
         const iconClassName = isMenuOpen ? "ms-Icon ms-Icon--Cancel" : "ms-Icon ms-Icon--GlobalNavButton";
         const homeUrl = "https://bmrn.sharepoint.com/sites/bioweb-home";
         const { topLevelMenuItems } = this.props;
@@ -195,7 +210,6 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
                 <Icon
                     iconName="Cancel"
                     onClick={this.toggleSearch}
-                   
                     style={{ cursor: 'pointer', marginLeft: '8px' }}
                 />
             </div>
@@ -257,8 +271,13 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
                             {searchElement}
                             {!isSearchBoxExpanded && <QuestionMarkIconWithTooltip spfxContext={this.props.spfxContext} />}
                             {!isSearchBoxExpanded && <ChatbotIconWithTooltip />}
-                            {!isSearchBoxExpanded && <AppPanel spfxContext={this.props.spfxContext} />}
+                            {!isSearchBoxExpanded && <div><AppPanel spfxContext={this.props.spfxContext} /></div>}
                         </div>
+                    </div>
+                )}
+                {isAppPanelOpen && (
+                    <div ref={this.menuRef}>
+                        <AppPanel spfxContext={this.props.spfxContext} />
                     </div>
                 )}
             </div>
