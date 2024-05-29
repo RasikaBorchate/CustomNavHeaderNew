@@ -25,13 +25,14 @@ export interface IMobileMenuState {
     isSearchBoxExpanded: boolean;
     isSearchBoxVisible: boolean;
     openSubMenu: { [key: string]: boolean };
-    selectedMenuItem: string | null; // Track the selected menu item
-    selectedSubMenuItem: string | null; // Track the selected sub-menu item
+    selectedMenuItem: string | null;
+    selectedSubMenuItem: string | null;
 }
 
 @withResponsiveMode
 export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuState> {
     sp: any;
+    menuRef: React.RefObject<HTMLDivElement>;
 
     state: IMobileMenuState = {
         isMenuOpen: false,
@@ -39,18 +40,41 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
         isSearchBoxExpanded: false,
         isSearchBoxVisible: false,
         openSubMenu: {},
-        selectedMenuItem: null, // Initialize with no selected menu item
-        selectedSubMenuItem: null // Initialize with no selected sub-menu item
+        selectedMenuItem: null,
+        selectedSubMenuItem: null
     };
 
     constructor(props: IMobileMenuProps) {
         super(props);
         this.sp = spfi().using(SPFx(props.spfxContext));
+        this.menuRef = React.createRef();
     }
+
+    componentDidMount() {
+        document.addEventListener('click', this.handleOutsideClick);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('click', this.handleOutsideClick);
+    }
+
+    handleOutsideClick = (event: MouseEvent) => {
+        if (this.menuRef.current && !this.menuRef.current.contains(event.target as Node)) {
+            this.setState({
+                isMenuOpen: false,
+                isFlyoutOpen: false,
+                isSearchBoxExpanded: false,
+                isSearchBoxVisible: false
+            });
+        }
+    };
 
     toggleMenu = () => {
         this.setState(prevState => ({
-            isMenuOpen: !prevState.isMenuOpen
+            isMenuOpen: !prevState.isMenuOpen,
+            isFlyoutOpen: prevState.isMenuOpen ? prevState.isFlyoutOpen : false,
+            isSearchBoxExpanded: false,
+            isSearchBoxVisible: false
         }));
     };
 
@@ -60,14 +84,17 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
                 ...prevState.openSubMenu,
                 [menuId]: !prevState.openSubMenu[menuId]
             },
-            selectedMenuItem: prevState.selectedMenuItem === menuId ? null : menuId, // Toggle selected menu item
-            selectedSubMenuItem: null // Reset selected sub-menu item when toggling main menu item
+            selectedMenuItem: prevState.selectedMenuItem === menuId ? null : menuId,
+            selectedSubMenuItem: null
         }));
     };
 
     toggleFlyout = () => {
         this.setState(prevState => ({
-            isFlyoutOpen: !prevState.isFlyoutOpen
+            isFlyoutOpen: !prevState.isFlyoutOpen,
+            isMenuOpen: prevState.isFlyoutOpen ? prevState.isMenuOpen : false,
+            isSearchBoxExpanded: false,
+            isSearchBoxVisible: false
         }));
     };
 
@@ -98,28 +125,23 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
 
     handleChatbotClick = () => {
         console.log('Chatbot icon clicked');
-        // Add any logic here that should execute when the Chatbot icon is clicked
     };
+
     handleTopLevelItemClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, item: TopLevelMenuModel) => {
         const { selectedMenuItem } = this.state;
-    
-        // Check if the clicked item is already open
+
         if (selectedMenuItem === item.id.toString()) {
-            // If the clicked item is already open, close it
             this.toggleSubMenu(item.id.toString());
         } else {
-            // If the clicked item is not open, close the previously open item (if any) and expand the clicked item
             if (selectedMenuItem) {
                 this.toggleSubMenu(selectedMenuItem);
             }
-            // Prevent the default behavior only if the item does not have a URL
             if (!item.url) {
                 event.preventDefault();
                 this.toggleSubMenu(item.id.toString());
             }
         }
     };
-    
 
     renderSubMenu(columns: FlyoutColumn[], parentId: string) {
         const { openSubMenu, selectedSubMenuItem } = this.state;
@@ -162,13 +184,21 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
         const iconClassNameFlyout = isFlyoutOpen ? "ms-Icon ms-Icon--ChevronUpSmall" : "ms-Icon ms-Icon--More";
 
         const searchElement = isSearchBoxExpanded ? (
-            <SearchBox
-                placeholder="Search BioWeb..."
-                onSearch={this.onSearch}
-                styles={{ root: { width: '100%' } }}
-                onBlur={() => this.setState({ isSearchBoxExpanded: false })}
-                underlined={true}
-            />
+            <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                <SearchBox
+                    placeholder="Search BioWeb..."
+                    onSearch={this.onSearch}
+                    styles={{ root: { width: '100%' } }}
+                    onBlur={() => this.setState({ isSearchBoxExpanded: false })}
+                    underlined={true}
+                />
+                <Icon
+                    iconName="Cancel"
+                    onClick={this.toggleSearch}
+                   
+                    style={{ cursor: 'pointer', marginLeft: '8px' }}
+                />
+            </div>
         ) : (
             <Icon
                 iconName="Search"
@@ -179,7 +209,7 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
         );
 
         return (
-            <div className={`ms-Grid ${styles.container}`}>
+            <div className={`ms-Grid ${styles.container}`} ref={this.menuRef}>
                 <div className={`ms-Grid-row ${styles.row}`}>
                     <div className={`ms-Grid-col ms-sm1 ${styles.togglemenumobile}`}>
                         <i className={iconClassName} aria-hidden="true" style={{ cursor: 'pointer' }} onClick={this.toggleMenu} title='Toggle Navigation Pane' />
@@ -223,7 +253,7 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
                 )}
                 {isFlyoutOpen && (
                     <div className={` ${styles.flyoutpanel}`}>
-                        <div className={`ms-Grid-col ms-sm12 ms-md12 ms-lg4 ${styles1.searchBoxContainer}`}>
+                        <div className={`ms-Grid-col ms-sm12 ms-md12 ms-lg12 ${styles1.searchBoxContainer}`}>
                             {searchElement}
                             {!isSearchBoxExpanded && <QuestionMarkIconWithTooltip spfxContext={this.props.spfxContext} />}
                             {!isSearchBoxExpanded && <ChatbotIconWithTooltip />}

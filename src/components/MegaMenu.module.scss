@@ -29,8 +29,8 @@
   display: flex;
   align-items: center; // This centers the search box vertically
   justify-content: flex-end; // This aligns the search box to the right
-  height: 40px;
-  //padding-top: 25px;
+  padding: 15px;
+  height: 65px !important;
   .ms-SearchBox {
     max-width: 300px; // Adjust the width as needed
   }
@@ -103,11 +103,38 @@
   width: 300px;
 }
 
+@media only screen and (max-width: 1280px) {
+  .searchBoxContainer {
+      display: flex;
+      align-items: center; // This centers the search box vertically
+      justify-content: flex-end; // This aligns the search box to the right
+      padding: 15px;
+      height: 65px !important;
+  }
+  .searchBoxContent{
+    width: 150px;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .searchBoxContainer {
+      display: flex;
+      align-items: center; // This centers the search box vertically
+      justify-content: flex-end; // This aligns the search box to the right
+      padding: 15px;
+      height: 65px !important;
+  }
+  .searchBoxContent{
+    width: 150px;
+  }
+}
+
+
 @media only screen and (max-width: 768px) {
   .searchBoxContainer {
       display: flex;
       align-items: center; // This centers the search box vertically
-      justify-content: center; // This aligns the search box to the right
+      justify-content: flex-end; // This aligns the search box to the right
       padding: 15px;
       height: 65px !important;
   }
@@ -121,7 +148,7 @@
       display: flex;
       align-items: center; // This centers the search box vertically
       justify-content: flex-end; // This aligns the search box to the right
-      padding: 12px 24;
+      padding: 15px;
       height: 64px !important;
       > i{
         margin:0 9px;
