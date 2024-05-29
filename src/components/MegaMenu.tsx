@@ -12,7 +12,7 @@ import AppPanel from './AppPanel';
 import { Search20Regular } from '@fluentui/react-icons';
 import { spfi, SPFx } from "@pnp/sp";
 import AlertBar from './AlertBar';
-import ChatBot from './ChatBot/ChatBot';
+
 
 export interface IMegaMenuProps {
     topLevelMenuItems: TopLevelMenuModel[];
@@ -159,9 +159,8 @@ export class MegaMenu extends React.Component<IMegaMenuProps, IMegaMenuState> {
                                         <QuestionMarkIconWithTooltip spfxContext={this.props.spfxContext} />
                                     </div>
                                     <div className='ms-Grid-item'>
-                                        <ChatbotIconWithTooltip  onClick={this.handleChatbotClick} />
-                                        {this.state.isChatbotOpen && <ChatBot isOpen={this.state.isChatbotOpen} onToggleChat={this.handleChatbotClick} />}
-       
+                                        <ChatbotIconWithTooltip  />
+                                       
                                     </div>
                                     <div className='ms-Grid-item'>
                                         <AppPanel spfxContext={this.props.spfxContext} />

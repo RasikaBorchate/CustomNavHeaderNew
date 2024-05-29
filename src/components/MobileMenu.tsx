@@ -101,15 +101,25 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
         // Add any logic here that should execute when the Chatbot icon is clicked
     };
     handleTopLevelItemClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, item: TopLevelMenuModel) => {
-        if (item.url) {
-            // If the item has a URL, let the link be followed
-            return;
-        } else {
-            // If the item does not have a URL, prevent the link and expand the menu
-            event.preventDefault();
+        const { selectedMenuItem } = this.state;
+    
+        // Check if the clicked item is already open
+        if (selectedMenuItem === item.id.toString()) {
+            // If the clicked item is already open, close it
             this.toggleSubMenu(item.id.toString());
+        } else {
+            // If the clicked item is not open, close the previously open item (if any) and expand the clicked item
+            if (selectedMenuItem) {
+                this.toggleSubMenu(selectedMenuItem);
+            }
+            // Prevent the default behavior only if the item does not have a URL
+            if (!item.url) {
+                event.preventDefault();
+                this.toggleSubMenu(item.id.toString());
+            }
         }
     };
+    
 
     renderSubMenu(columns: FlyoutColumn[], parentId: string) {
         const { openSubMenu, selectedSubMenuItem } = this.state;
@@ -216,7 +226,7 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
                         <div className={`ms-Grid-col ms-sm12 ms-md12 ms-lg4 ${styles1.searchBoxContainer}`}>
                             {searchElement}
                             {!isSearchBoxExpanded && <QuestionMarkIconWithTooltip spfxContext={this.props.spfxContext} />}
-                            {!isSearchBoxExpanded && <ChatbotIconWithTooltip onClick={this.handleChatbotClick} />}
+                            {!isSearchBoxExpanded && <ChatbotIconWithTooltip />}
                             {!isSearchBoxExpanded && <AppPanel spfxContext={this.props.spfxContext} />}
                         </div>
                     </div>

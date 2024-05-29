@@ -1,26 +1,26 @@
 /* tslint:disable */
 require("./MobileMenu.module.css");
 const styles = {
-  container: 'container_d282111b',
-  row: 'row_d282111b',
-  togglemenumobile: 'togglemenumobile_d282111b',
-  logomobile: 'logomobile_d282111b',
-  righticonmobile: 'righticonmobile_d282111b',
-  flyoutpanel: 'flyoutpanel_d282111b',
-  'is-active': 'is-active_d282111b',
-  'is-underlined': 'is-underlined_d282111b',
-  menuPanel: 'menuPanel_d282111b',
-  mainMenu: 'mainMenu_d282111b',
-  subsubMenu: 'subsubMenu_d282111b',
-  selectedMenuItem: 'selectedMenuItem_d282111b',
-  menuItem: 'menuItem_d282111b',
-  iconStylefront: 'iconStylefront_d282111b',
-  iconStyleback: 'iconStyleback_d282111b',
-  subMenuItem: 'subMenuItem_d282111b',
-  subMenuItemicon: 'subMenuItemicon_d282111b',
-  subMenuItemtext: 'subMenuItemtext_d282111b',
-  subsubMenuItem: 'subsubMenuItem_d282111b',
-  subMenu: 'subMenu_d282111b'
+  container: 'container_d8700528',
+  row: 'row_d8700528',
+  togglemenumobile: 'togglemenumobile_d8700528',
+  logomobile: 'logomobile_d8700528',
+  righticonmobile: 'righticonmobile_d8700528',
+  flyoutpanel: 'flyoutpanel_d8700528',
+  'is-active': 'is-active_d8700528',
+  'is-underlined': 'is-underlined_d8700528',
+  menuPanel: 'menuPanel_d8700528',
+  mainMenu: 'mainMenu_d8700528',
+  subsubMenu: 'subsubMenu_d8700528',
+  selectedMenuItem: 'selectedMenuItem_d8700528',
+  menuItem: 'menuItem_d8700528',
+  iconStylefront: 'iconStylefront_d8700528',
+  iconStyleback: 'iconStyleback_d8700528',
+  subMenuItem: 'subMenuItem_d8700528',
+  subMenuItemicon: 'subMenuItemicon_d8700528',
+  subMenuItemtext: 'subMenuItemtext_d8700528',
+  subsubMenuItem: 'subsubMenuItem_d8700528',
+  subMenu: 'subMenu_d8700528'
 };
 
 export default styles;
