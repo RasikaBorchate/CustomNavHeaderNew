@@ -35,7 +35,7 @@ export class TopLevelMenu extends React.Component<ITopLevelMenuProps, ITopLevelM
         const { topLevelMenu } = this.props;
         if (topLevelMenu.url) {
             window.location.href = topLevelMenu.url;
-        } else if (topLevelMenu.columns && topLevelMenu.columns.length > 0) {
+        } else {
             this.toggleFlyout();
         }
     }
@@ -63,10 +63,7 @@ export class TopLevelMenu extends React.Component<ITopLevelMenuProps, ITopLevelM
                 onClick={this.handleClick}
             >
                 <div
-                    onClick={(event) => {
-                        event.stopPropagation();
-                        this.props.handleToggle(this.props.topLevelMenu);
-                    }}
+                    onClick={() => this.props.handleToggle(this.props.topLevelMenu)}
                     style={{ borderBottom: isSelected ? "2px solid #043591" : "none", paddingBottom: "4px" }}
                 >
                     {topLevelMenu.text}
