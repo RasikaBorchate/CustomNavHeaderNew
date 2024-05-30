@@ -1,8 +1,8 @@
 /* tslint:disable */
 require("./FlyoutColumn.module.css");
 const styles = {
-  null: 'null_0e2b6d32',
-  submenu: 'submenu_0e2b6d32'
+  null: 'null_9856f9b5',
+  submenu: 'submenu_9856f9b5'
 };
 
 export default styles;

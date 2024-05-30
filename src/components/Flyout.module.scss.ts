@@ -1,9 +1,9 @@
 /* tslint:disable */
 require("./Flyout.module.css");
 const styles = {
-  container: 'container_a411e826',
-  'ms-SPLegacyFabricBlock': 'ms-SPLegacyFabricBlock_a411e826',
-  'ms-Grid-col': 'ms-Grid-col_a411e826'
+  container: 'container_3729a204',
+  'ms-SPLegacyFabricBlock': 'ms-SPLegacyFabricBlock_3729a204',
+  'ms-Grid-col': 'ms-Grid-col_3729a204'
 };
 
 export default styles;

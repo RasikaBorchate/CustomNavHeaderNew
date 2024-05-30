@@ -103,7 +103,7 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
         }));
     };
 
-    onSearch = (searchTerm: string): void => {
+   onSearch = (searchTerm: string): void => {
         const searchVerticalIdentifier = '%2Fsearch%2F1715802103063_15hccvoyq';
         const searchBaseUrl = `https://bmrn.sharepoint.com/_layouts/15/sharepoint.aspx?`;
 
