@@ -4,22 +4,14 @@ import { Bot20Regular } from '@fluentui/react-icons';
 
 // Define the interface for the component props
 interface ChatbotIconWithTooltipProps {
- 
+    // Currently empty, can be expanded to include future props
 }
 
 const ChatbotIconWithTooltip: React.FC<ChatbotIconWithTooltipProps> = ({ }) => {
     const handleClick = () => {
-        const iframe = document.createElement('iframe');
-        iframe.style.width = '100%';
-        iframe.style.height = '400px'; // Adjust height as needed
-        iframe.src = `https://bmrn.sharepoint.com/sites/biowebdev1/pages/testchatbot.aspx`;
-        iframe.frameBorder = '0';
-
-        // Optionally, check if an iframe already exists and remove it before adding a new one
-        const existingIframe = document.body.querySelector('iframe');
-        if (existingIframe) existingIframe.remove();  // Corrected typo and logical error
-
-        document.body.appendChild(iframe);
+        // Open the chatbot page in a new tab
+        const chatbotUrl = `https://bmrn.sharepoint.com/sites/biowebdev1/pages/testchatbot.aspx`;
+        window.open(chatbotUrl, '_blank');
     };
 
     return (
