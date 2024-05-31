@@ -49,7 +49,7 @@ export class FlyoutColumn extends React.Component<IFlyoutColumnProps, IFlyoutCol
             <div
                 className={`ms-Grid-col ms-sm12 ms-fontColor-neutralPrimary  ${styles.submenu} ${mobileMode ? "ms-slideDownIn10 ms-textAlignLeft" : ""}`}
                 style={!mobileMode ? { marginLeft:'10px',
-                    width: this.props.widthPercent + "%"
+                    width: '22%'
                 } : {}}
             >
                 <FlyoutColumnHeading
