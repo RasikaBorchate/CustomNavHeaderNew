@@ -18,6 +18,16 @@
     [data-is-scrollable]{
       overflow: visible;
     }
+    @media(max-width:1023px){
+      top:195px;
+    }
+    @media(max-width:639px){
+      top:178px;
+      right: 0;
+      border-top:1px solid #CFCFCF;
+      box-shadow: none;
+      width: 100%;
+    }
   }
   h3{
     margin-bottom: 10px;
