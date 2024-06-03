@@ -1,26 +1,28 @@
 /* tslint:disable */
 require("./AppPanel.module.css");
 const styles = {
-  appList: 'appList_45c8f812',
-  'app-grid': 'app-grid_45c8f812',
-  appItemGrid: 'appItemGrid_45c8f812',
-  appItemList: 'appItemList_45c8f812',
-  'app-icon': 'app-icon_45c8f812',
-  Add: 'Add_45c8f812',
-  appItem: 'appItem_45c8f812',
-  appIcon: 'appIcon_45c8f812',
-  appName: 'appName_45c8f812',
-  editAppBtn: 'editAppBtn_45c8f812',
-  deleteAppBtn: 'deleteAppBtn_45c8f812',
-  viewToggle: 'viewToggle_45c8f812',
-  viewToggleButton: 'viewToggleButton_45c8f812',
-  'app-list': 'app-list_45c8f812',
-  appitemsgrid: 'appitemsgrid_45c8f812',
-  'app-name': 'app-name_45c8f812',
-  viewtogglebuttons: 'viewtogglebuttons_45c8f812',
-  panelappbutton: 'panelappbutton_45c8f812',
-  appModel: 'appModel_45c8f812',
-  appsearchbox: 'appsearchbox_45c8f812'
+  appList: 'appList_e696c61b',
+  apppanel: 'apppanel_e696c61b',
+  'app-grid': 'app-grid_e696c61b',
+  appItemGrid: 'appItemGrid_e696c61b',
+  appItemList: 'appItemList_e696c61b',
+  'app-icon': 'app-icon_e696c61b',
+  Add: 'Add_e696c61b',
+  appItem: 'appItem_e696c61b',
+  appIcon: 'appIcon_e696c61b',
+  appName: 'appName_e696c61b',
+  editAppBtn: 'editAppBtn_e696c61b',
+  deleteAppBtn: 'deleteAppBtn_e696c61b',
+  viewToggle: 'viewToggle_e696c61b',
+  viewToggleButton: 'viewToggleButton_e696c61b',
+  'app-list': 'app-list_e696c61b',
+  appitemsgrid: 'appitemsgrid_e696c61b',
+  'app-name': 'app-name_e696c61b',
+  viewtogglebuttons: 'viewtogglebuttons_e696c61b',
+  selectedView: 'selectedView_e696c61b',
+  panelappbutton: 'panelappbutton_e696c61b',
+  appModel: 'appModel_e696c61b',
+  appsearchbox: 'appsearchbox_e696c61b'
 };
 
 export default styles;

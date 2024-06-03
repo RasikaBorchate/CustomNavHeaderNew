@@ -3,7 +3,9 @@
   padding: 10px;
   overflow: auto;
 }
-
+.apppanel{
+  height: 500px !important;
+}
 *[class*="app-grid"]>div,
 .app-grid>div {
   display: inline-block;
@@ -90,7 +92,8 @@ button:hover,
   opacity: 0.8;
 }
 .app-list{
-  max-height: calc(100vh - 160px);
+  height: 400px !important;
+  //max-height: calc(100vh - 160px);
   overflow-y: auto;
 }
 .appitemsgrid{
@@ -112,7 +115,10 @@ button:hover,
   margin-bottom: 18px;
   display: block;
 }
-
+// AppPanel.module.scss
+.selectedView {
+  color: #000 !important;
+}
 .panelappbutton{
   padding: 9px 22px;
   border-radius: 2px;
