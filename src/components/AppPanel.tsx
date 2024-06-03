@@ -521,8 +521,8 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
             />
           )}
 
-          {!showEditDialog && <div className={`app-list ${this.state.viewType === 'grid' ? styles.appitemsgrid : ''}`} style={{ marginBottom: '18px', paddingBottom: '12px' }}>
-            <div className={`app-list ${viewType === 'grid' ? styles.appitemsgrid : ''}`}>
+          {!showEditDialog && <div className={styles['app-list'] + `${this.state.viewType === 'grid' ? styles.appitemsgrid : ''}`} style={{ marginBottom: '18px', paddingBottom: '12px' }}>
+            <div className={styles['app-list'] + `${viewType === 'grid' ? styles.appitemsgrid : ''}`}>
               <DragDropContext onDragEnd={this.onDragEnd}>
                 <Droppable droppableId="droppable">
                   {(provided) => (
@@ -543,7 +543,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
               </DragDropContext>
             </div>
           </div>}
-          {(showEditDialog || selectedApps.length === 0) && <div className={`app-list ${this.state.viewType === 'grid' ? styles.appitemsgrid : ''}`} style={{ borderBottom: '1px solid #ccc', marginBottom: '18px' }}>
+          {(showEditDialog || selectedApps.length === 0) && <div className={styles['app-list'] + `${this.state.viewType === 'grid' ? styles.appitemsgrid : ''}`} style={{ borderBottom: '1px solid #ccc', marginBottom: '18px' }}>
             {contentToShow}
           </div>}
           <PrimaryButton

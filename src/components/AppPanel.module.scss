@@ -3,8 +3,27 @@
   padding: 10px;
   overflow: auto;
 }
+.overlay{
+  background: red!important;
+}
 .apppanel{
-  height: 500px !important;
+  padding-top: 100px;
+  > div:nth-child(2){
+    height: auto !important;
+    inset: auto;
+    top: 135px;
+    width: 465px;
+    right: 15px;
+    padding-bottom: 30px;
+    [data-is-scrollable]{
+      overflow: visible;
+    }
+  }
+  h3{
+    margin-bottom: 10px;
+    font-weight: 400;
+    font-size: 14px;
+  }
 }
 *[class*="app-grid"]>div,
 .app-grid>div {
@@ -92,9 +111,25 @@ button:hover,
   opacity: 0.8;
 }
 .app-list{
-  height: 400px !important;
-  //max-height: calc(100vh - 160px);
+  scroll-margin-right:10px;
+  max-height: 400px;
   overflow-y: auto;
+  overflow-x: hidden;
+  &::-webkit-scrollbar {
+    width: 7px;
+  }
+  &::-webkit-scrollbar-track {
+      background: rgba(#000,0.1);
+      border-left: 3px white solid;
+  }
+  &::-webkit-scrollbar-thumb {
+    width: 5px;
+    padding-left: 3px;
+    background-clip: padding-box;
+    background: rgba(#000,0.5);
+    border-left: 3px white solid;
+    background-clip: padding-box;
+  }
 }
 .appitemsgrid{
   margin: 0 -5px 8px;
