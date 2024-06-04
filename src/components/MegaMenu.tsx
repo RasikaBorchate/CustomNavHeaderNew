@@ -5,14 +5,13 @@ import { TopLevelMenu } from './TopLevelMenu';
 import { Flyout } from './Flyout';
 import { MobileMenu } from './MobileMenu';
 import { TopLevelMenu as TopLevelMenuModel } from '../model/TopLevelMenu';
-import { SearchBox } from 'office-ui-fabric-react';
 import QuestionMarkIconWithTooltip from './QuestionMarkIconWithTooltip';
 import ChatbotIconWithTooltip from './ChatbotIconWithTooltip';
 import AppPanel from './AppPanel';
 import { Search20Regular } from '@fluentui/react-icons';
 import { spfi, SPFx } from "@pnp/sp";
 import AlertBar from './AlertBar';
-
+import { FaSearch, FaTimes } from 'react-icons/fa';
 
 export interface IMegaMenuProps {
     topLevelMenuItems: TopLevelMenuModel[];
@@ -28,7 +27,8 @@ export interface IMegaMenuState {
     showTopLevelMenuItemsWhenMobile: boolean;
     isSearchBoxVisible: boolean;
     isSearchBoxExpanded: boolean;
-    isChatbotOpen:boolean;
+    isChatbotOpen: boolean;
+    searchQuery: string;
 }
 
 @withResponsiveMode
@@ -50,14 +50,17 @@ export class MegaMenu extends React.Component<IMegaMenuProps, IMegaMenuState> {
             showTopLevelMenuItemsWhenMobile: false,
             isSearchBoxVisible: false,
             isSearchBoxExpanded: false,
-            isChatbotOpen: false, // Initialize ChatBot closed
+            isChatbotOpen: false,
+            searchQuery: ''
         };
 
         this.handleToggleTopLevelMenu = this.handleToggleTopLevelMenu.bind(this);
         this.handleMobileMenuTouched = this.handleMobileMenuTouched.bind(this);
         this.handleOutsideClick = this.handleOutsideClick.bind(this);
-        this.handleChatbotClick = this.handleChatbotClick.bind(this); // Bind the new method
- 
+        this.handleChatbotClick = this.handleChatbotClick.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleClearSearch = this.handleClearSearch.bind(this);
+        this.handleSearchClick = this.handleSearchClick.bind(this);
     }
 
     componentDidMount() {
@@ -76,7 +79,7 @@ export class MegaMenu extends React.Component<IMegaMenuProps, IMegaMenuState> {
 
     onSearch = (searchTerm: string): void => {
         const searchVerticalIdentifier = '%2Fsearch%2F1715802103063_15hccvoyq';
-        const searchBaseUrl = `https://bmrn.sharepoint.com/_layouts/15/sharepoint.aspx?`;
+        const searchBaseUrl = `https://bmrn.sharepoint.com/_layouts/15/search.aspx?`;
 
         const queryParams = new URLSearchParams({
             q: searchTerm,
@@ -92,15 +95,30 @@ export class MegaMenu extends React.Component<IMegaMenuProps, IMegaMenuState> {
             isSearchBoxExpanded: !prevState.isSearchBoxExpanded
         }));
     }
+
     handleChatbotClick() {
         this.setState(prevState => ({
             isChatbotOpen: !prevState.isChatbotOpen
         }));
         console.log('Chatbot toggle triggered');
     }
+
+    handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+        this.setState({ searchQuery: event.target.value });
+    }
+
+    handleClearSearch() {
+        this.setState({ searchQuery: '' });
+        this.setState({  isSearchBoxExpanded: false});
+    }
+
+    handleSearchClick() {
+        this.onSearch(this.state.searchQuery);
+    }
+
     public render(): React.ReactElement<IMegaMenuProps> {
         const { responsiveMode, spfxContext, topLevelMenuItems } = this.props;
-        const { showFlyout, selectedTopLevelItem, showTopLevelMenuItemsWhenMobile, isSearchBoxExpanded } = this.state;
+        const { showFlyout, selectedTopLevelItem, showTopLevelMenuItemsWhenMobile, isSearchBoxExpanded, searchQuery } = this.state;
         const homeUrl = "https://bmrn.sharepoint.com/sites/bioweb-home";
         const mobileMode = (responsiveMode ?? ResponsiveMode.xLarge) < ResponsiveMode.xLarge;
 
@@ -115,14 +133,23 @@ export class MegaMenu extends React.Component<IMegaMenuProps, IMegaMenuState> {
         ));
 
         const searchElement = isSearchBoxExpanded ? (
-            <SearchBox
-                placeholder="Search BioWeb..."
-                onSearch={this.onSearch}
-                styles={{ root: { width: '100%', borderBottom: '1px solid #000' } }}
-                className={styles.searchBoxWrapper}
-                onBlur={() => this.setState({ isSearchBoxExpanded: false })}
-                underlined={true}
-            />
+            <div style={{ display: 'flex', alignItems: 'center', width: '100%', borderBottom: '1px solid #000' }}>
+               <button type="button" onClick={this.handleClearSearch} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                    <FaTimes />
+                </button>
+                <input
+                    type='text'
+                    value={searchQuery}
+                    onChange={this.handleInputChange}
+                    placeholder="Search BioWeb..."
+                    style={{ width: '100%', padding: '8px', border: 'none', outline: 'none' }}
+                  //  onBlur={() => this.setState({ isSearchBoxExpanded: false })}
+                />
+                <button type="button" onClick={this.handleSearchClick} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                    <FaSearch />
+                </button>
+                
+            </div>
         ) : (
             <Search20Regular
                 className={styles.searchIcon}
@@ -132,7 +159,6 @@ export class MegaMenu extends React.Component<IMegaMenuProps, IMegaMenuState> {
                 onMouseDown={() => this.setState({ isSearchBoxExpanded: true })}
             />
         );
-
         return (
             <div ref={this.megaMenuRef}>
                 {mobileMode && (

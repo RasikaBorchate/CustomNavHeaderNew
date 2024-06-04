@@ -64,7 +64,7 @@ export class TopLevelMenu extends React.Component<ITopLevelMenuProps, ITopLevelM
             >
                 <div
                     onClick={() => this.props.handleToggle(this.props.topLevelMenu)}
-                    style={{ borderBottom: isSelected ? "2px solid #043591" : "none", paddingBottom: "4px" }}
+                    style={{ borderBottom: isSelected ? "2px solid #043591" : "2px solid #fff", paddingBottom: "4px" }}
                 >
                     {topLevelMenu.text}
                 </div>
