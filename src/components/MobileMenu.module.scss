@@ -250,3 +250,57 @@
     }
 
 }
+
+
+
+.searchMenu{
+    background: #FAFAFA;
+    display: flex;
+    align-items: center;
+    right: -6px;
+    top:1px;
+    position: relative;
+    border-bottom: 1px solid #000;
+    width: 100%;
+    &Close,&Button{
+      height: 34px;
+      width: 34px;
+      border:0;
+      padding: 0;
+      outline: 0;
+      background: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      overflow: hidden;
+      svg{
+        width: 18px;
+        height: 18px;
+      }
+    }
+    input{
+      background: transparent;
+      width: calc(100% - 40px);
+      height: 40px;
+      font-size: 16px;
+      color:#333;
+      box-sizing: border-box;
+    }
+    input:focus + .searchMenuButton{
+      background:rgb(4, 53, 145);
+      svg{
+        path{fill:#fff;}
+      }
+    }
+    &Button{
+      position: absolute;
+      top:3px;
+      right: 6px;
+      svg{
+        width: 25px;
+        height: 25px;
+      }
+    }
+  }
+  

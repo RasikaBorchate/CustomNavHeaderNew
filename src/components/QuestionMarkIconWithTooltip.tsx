@@ -46,15 +46,14 @@ const QuestionMarkIconWithCallout: React.FC<IQuestionMarkIconWithCalloutProps> =
 
   const calloutContent = (
     <div style={{ padding: '20px' }}>
-      {helpLinks.map(item => (
+      {helpLinks.map((item, index) => (
         <React.Fragment key={item.Title}>
           <Link href={item.link.Url} target="_blank" title={item.Title} style={{ color: '#333', textDecoration: 'none', fontSize: '14px' }}>
             {item.Title}
           </Link>
-          <hr />
+          {index < helpLinks.length - 1 && <hr />}
         </React.Fragment>
       ))}
-      
     </div>
   );
 
