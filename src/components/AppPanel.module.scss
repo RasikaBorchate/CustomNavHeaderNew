@@ -3,11 +3,17 @@
   padding: 10px;
   overflow: auto;
 }
-.overlay{
-  background: red!important;
-}
 .apppanel{
-  padding-top: 100px;
+  > div:nth-child(1){
+    background: rgba(#F1F1F1,0.8);
+    backdrop-filter: blur(2px);
+    left: 48px;
+    top:118px;
+    @media(max-width:1023px){
+      top: 179px;
+      left: 0;
+    }
+  }
   > div:nth-child(2){
     height: auto !important;
     inset: auto;
@@ -25,7 +31,7 @@
       top:178px;
       right: 0;
       border-top:1px solid #CFCFCF;
-      box-shadow: none;
+      box-shadow: 0 4px 16px 0 rgba(#000,0.05);
       width: 100%;
     }
   }
@@ -139,6 +145,15 @@ button:hover,
     background: rgba(#000,0.5);
     border-left: 3px white solid;
     background-clip: padding-box;
+  }
+  @media(max-width:639px){
+    max-height: 306px;
+  }
+  @media(max-height:660px){
+    max-height: 250px;
+  }
+  @media(max-height:720px){
+    max-height: 306px;
   }
 }
 .appitemsgrid{
