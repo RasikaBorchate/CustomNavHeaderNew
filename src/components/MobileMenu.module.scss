@@ -98,7 +98,10 @@
             }
         }
     }
-
+    .searchMenu{
+        right: 0;
+        top:0;
+    }
     .flyoutpanel {
 
         position: absolute;
@@ -109,19 +112,12 @@
         z-index: 1000;
         box-shadow: 10px 10px 15px rgba(128, 128, 128, 0.5);
         box-sizing: border-box;
-
+        @media(max-width:1023px){
+            padding: 0 15px;
+        }
         @media(max-width:768px){
-            padding: 0 10px 0 10px;
+            padding: 0 10px;
         }
-        @media(max-width:640px){
-            padding: 0 0px 0 10px;
-        }
-
-
-        @media(max-width:480px){
-            padding: 0 12px 0 10px;
-        }
-
         .is-active,
         .is-underlined {
             background: #eef6f7;

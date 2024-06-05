@@ -73,7 +73,8 @@
     }
   }
 
-  @media(max-width:1024px) {
+  @media(max-width:1023px) {
+    padding-left: 0 !important;
     padding-right: 0 !important;
   }
 }
@@ -127,6 +128,10 @@
       height: 25px;
     }
   }
+  @media(max-width:1023px){
+    right: 0;
+    top:0;
+  }
 }
 
 .searchBoxWrapper {
@@ -176,26 +181,17 @@
     padding: 15px;
     height: 65px !important;
   }
-
-  .searchBoxContent {
-    width: 150px;
-  }
 }
 
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 1023px) {
   .searchBoxContainer {
     display: flex;
     align-items: center; // This centers the search box vertically
     justify-content: flex-end; // This aligns the search box to the right
     padding: 15px;
     height: 65px !important;
-    right: 15px;
+    right: 0;
   }
-
-  .searchBoxContent {
-    width: 150px;
-  }
-
 
   *[class*="ms-fontSize-m"],
   .ms-fontSize-m {
@@ -235,8 +231,6 @@
     }
 
     >div {
-      margin: 0 9px;
-
       &:first-child {
         height: 40px;
         background: #FAFAFA;
@@ -266,9 +260,6 @@
         height: 40px;
       }
 
-      &:last-child {
-        margin-right: 9px;
-      }
     }
   }
 }
