@@ -17,7 +17,7 @@
     min-width: auto;
 
     @media(max-width:1279px) {
-      width: 125px;
+      width: 115px;
     }
 
   }
@@ -29,14 +29,16 @@
 .middleMenu{
   flex:1;
   width: auto!important;
+  padding-left: 0!important;
 }
-.rightNavContainer {
+.rightNavContainer,.searchBoxContainer {
   display: flex;
   align-items: center; // This centers the search box vertically
   justify-content: flex-end; // This aligns the search box to the right
   padding: 15px;
   height: 65px !important;
   margin-left: auto;
+  float: none;
   width: auto!important;
   .ms-SearchBox {
     max-width: 300px; // Adjust the width as needed
@@ -197,14 +199,13 @@
     padding: 15px;
     height: 65px !important;
     right: 0;
+    width: 100%!important;
   }
 
   *[class*="ms-fontSize-m"],
   .ms-fontSize-m {
     padding: 10px 6px !important;
   }
-
-
 
 
 }
@@ -216,6 +217,7 @@
     align-items: center; // This centers the search box vertically
     justify-content: flex-end; // This aligns the search box to the right
     padding: 15px;
+    padding-right: 10px !important;
     height: 65px !important;
   }
 
@@ -305,7 +307,7 @@
 
   &::before,
   &::after {
-    display: none;
+    display: none!important;
   }
 
   @media(max-width:1024px) {
