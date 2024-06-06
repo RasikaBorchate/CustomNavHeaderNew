@@ -17,7 +17,7 @@
     min-width: auto;
 
     @media(max-width:1279px) {
-      width: 115px;
+      width: 114px;
     }
 
   }
@@ -217,12 +217,18 @@
     align-items: center; // This centers the search box vertically
     justify-content: flex-end; // This aligns the search box to the right
     padding: 15px;
-    padding-right: 10px !important;
+    padding-right: 5px !important;
     height: 65px !important;
   }
 
   .searchBoxContent {
     width: 150px;
+  }
+}
+
+@media only screen and (max-width: 720px) {
+  .searchBoxContainer {
+    padding-right: 10px !important;
   }
 }
 
@@ -272,6 +278,11 @@
   }
 }
 
+@media only screen and (max-width: 639px) {
+  .searchBoxContainer {
+    padding-right: 23px !important;
+  }
+}
 
 @media only screen and (max-width: 480px) {
   .searchBoxContainer {

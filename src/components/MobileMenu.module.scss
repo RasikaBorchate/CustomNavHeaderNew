@@ -99,8 +99,18 @@
         }
     }
     .searchMenu{
-        right: 0;
+        right: 0px;
         top:0;
+        width: calc(100% + 5px);
+        margin-right: -5px;
+        @media only screen and (max-width: 720px) {
+            width: calc(100% + 10px);
+            margin-right: -10px;
+        }
+        @media only screen and (max-width: 639px) {
+            width: calc(100% + 23px);
+            margin-right: -23px;
+        }
     }
     .flyoutpanel {
 
