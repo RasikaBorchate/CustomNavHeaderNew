@@ -12,12 +12,12 @@
 
   .logo {
     display: block;
-    max-width: 192px;
+    width: 192px;
     height: auto;
     min-width: auto;
 
-    @media(max-width:1079px) {
-      max-width: 125px;
+    @media(max-width:1279px) {
+      width: 125px;
     }
 
   }
@@ -26,14 +26,18 @@
 .menuContainer {
   margin-top: 10px;
 }
-
-.searchBoxContainer {
+.middleMenu{
+  flex:1;
+  width: auto!important;
+}
+.rightNavContainer {
   display: flex;
   align-items: center; // This centers the search box vertically
   justify-content: flex-end; // This aligns the search box to the right
   padding: 15px;
   height: 65px !important;
-
+  margin-left: auto;
+  width: auto!important;
   .ms-SearchBox {
     max-width: 300px; // Adjust the width as needed
   }
@@ -84,10 +88,10 @@
   display: flex;
   align-items: center;
   right: -6px;
-  top:1px;
-  position: relative;
+  top: -2px;
+  position: absolute;
   border-bottom: 1px solid #000;
-  width: 100%;
+  width: 300px;
   &Close,&Button{
     height: 34px;
     width: 34px;
@@ -170,7 +174,9 @@
 }
 
 .searchBoxContent {
-  width: 300px;
+  width: 35px;
+  position: relative;
+  height: 35px;
 }
 
 @media only screen and (max-width: 1280px) {

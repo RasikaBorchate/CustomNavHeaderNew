@@ -179,11 +179,11 @@ export class MegaMenu extends React.Component<IMegaMenuProps, IMegaMenuState> {
                                     </a>
                                 </div>
                             )}
-                            <div className={`ms-Grid-col ms-sm12 ms-md12 ms-lg6`} >
+                            <div className={`ms-Grid-col ms-sm12 ms-md12 ms-lg6 ${styles.middleMenu}`} >
                                 {topLevelItems}
                             </div>
                             {!mobileMode && (
-                                <div className={`ms-Grid-col ms-sm12 ms-md12 ms-lg5 ${styles.searchBoxContainer}`}>
+                                <div className={`ms-Grid-col ms-sm12 ms-md12 ms-lg5 ${styles.rightNavContainer}`}>
                                     <div className={`ms-Grid-item ${styles.searchBoxContent}`}>{searchElement}</div>
                                     <div className='ms-Grid-item'>
                                         <QuestionMarkIconWithTooltip spfxContext={this.props.spfxContext} />
