@@ -40,8 +40,10 @@
             padding: 0;
             margin-left: -2px;
             width: 59.333333%;
-
-            @media(max-width:539px) {
+            @media(max-width:1023px) {
+                padding-left: 9px;
+            }
+            @media(max-width:639px) {
                 width: 57.333333%;
             }
             @media(max-width:439px) {
@@ -56,17 +58,32 @@
             font-size: 15px;
             text-align: right;
             font-weight: bold;
-            right: 1px;
+            right: -23px;
             top: 5px;
             cursor: pointer;
+            @media(max-width:991px){
+                right: -21px;
+            }
+            @media(max-width:891px){
+                right: -15px;
+            }
+            @media(max-width:790px){
+                right: -8px;
+            }
+            @media(max-width:767px){
+                right: 12px;
+            }
+            @media(max-width:690px){
+                right: 17px;
+            }
             @media(max-width:640px){
-
-                right: -5px;
+                right: 5px;
+            }
+            @media(max-width:639px){
+                right: 23px;
             }
             @media(max-width:480px){
-
                 text-align: right;
-               
             }
 
             i {
