@@ -15,7 +15,8 @@ const ChatbotIconWithTooltip: React.FC<ChatbotIconWithTooltipProps> = ({ }) => {
     };
 
     return (
-        <TooltipHost content="Chat with our bot" id="chatbotTooltip" calloutProps={{ gapSpace: 0 }}>
+        <TooltipHost content="BioChat" id="chatbotTooltip" calloutProps={{ gapSpace: 0 }}>
+
             <Bot20Regular title='Chatbot' style={{ height: '30px', width: '30px', cursor: 'pointer' }} onClick={handleClick} />
         </TooltipHost>
     );

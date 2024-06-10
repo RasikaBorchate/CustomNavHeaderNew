@@ -10,6 +10,7 @@ import { spfi, SPFx } from "@pnp/sp";
 import { TopLevelMenu as TopLevelMenuModel } from '../model/TopLevelMenu';
 import { FlyoutColumn } from '../model/FlyoutColumn';
 import { Link } from '../model/Link';
+import { TooltipHost } from 'office-ui-fabric-react';
 
 export interface IMobileMenuProps {
     handleTouched?: () => void;
@@ -239,12 +240,13 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
             </div>
             </div>
         ) : (
-            <Icon
+            <TooltipHost content="Search BioWeb" >
+                 <Icon
                 iconName="Search"
                 onClick={this.toggleSearch}
                 className={styles1.searchIcon}
                 onMouseDown={() => this.setState({ isSearchBoxExpanded: true })}
-            />
+            /></TooltipHost>
         );
 
         return (

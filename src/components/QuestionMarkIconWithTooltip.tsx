@@ -6,6 +6,7 @@ import { Link } from '@fluentui/react/lib/Link';
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { ChatHelp20Regular } from '@fluentui/react-icons';
 import { API_URLS } from '../common/Config';
+import { TooltipHost } from 'office-ui-fabric-react';
 
 interface IQuestionMarkIconWithCalloutProps {
   spfxContext: WebPartContext;
@@ -59,9 +60,11 @@ const QuestionMarkIconWithCallout: React.FC<IQuestionMarkIconWithCalloutProps> =
 
   return (
     <div>
-      <div ref={iconRef} style={{ cursor: 'pointer' }} onClick={toggleCallout}>
-        <ChatHelp20Regular title="Help" style={{ height: '30px', width: '30px' }} />
-      </div>
+      <TooltipHost content="Get Help" >
+        <div ref={iconRef} style={{ cursor: 'pointer' }} onClick={toggleCallout}>
+          <ChatHelp20Regular title="Get help" style={{ height: '30px', width: '30px' }} />
+        </div>
+      </TooltipHost>
       {isCalloutVisible && (
         <Callout
           className="ms-CalloutExample-callout"

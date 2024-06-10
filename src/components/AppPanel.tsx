@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
-import { DefaultPalette, IconButton, IStackItemStyles, IStackStyles, IStackTokens, PrimaryButton, Stack, TextField } from 'office-ui-fabric-react';
+import { DefaultPalette, IconButton, IStackItemStyles, IStackStyles, IStackTokens, PrimaryButton, Stack, TextField, TooltipHost } from 'office-ui-fabric-react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import styles from './AppPanel.module.scss';
 import { DropResult } from 'react-beautiful-dnd';
@@ -482,9 +482,11 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
 
     return (
       <>
-        <div title="Open Apps" style={{ cursor: 'pointer' }}>
+       <TooltipHost content="My Apps">
+        <div style={{ cursor: 'pointer' }}>
           <Grid16Regular title='Open App Panel' style={{ height: '30px', width: '30px', marginRight: '1px', cursor: 'pointer' }} onClick={this._togglePanel} />
         </div>
+        </TooltipHost>
         <Panel
           isOpen={showPanel}
           type={PanelType.medium}
