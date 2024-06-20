@@ -145,17 +145,21 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
     };
 
     onSearch = (searchTerm: string): void => {
-        const searchVerticalIdentifier = '%2Fsearch%2F1715802103063_15hccvoyq';
-        const searchBaseUrl = `https://bmrn.sharepoint.com/_layouts/15/search.aspx?`;
+       // const searchVerticalIdentifier = '%2Fsearch%2F1715802103063_15hccvoyq';
+        const searchBaseUrl = `https://bmrn.sharepoint.com/sites/BioWeb-Home/_layouts/15/search.aspx/1715802103063_15hccvoyq`;
 
         const queryParams = new URLSearchParams({
             q: searchTerm,
-            v: searchVerticalIdentifier
+          //  v: searchVerticalIdentifier
         });
 
         window.location.href = `${searchBaseUrl}?${queryParams.toString()}`;
     };
-
+    handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            this.handleSearchClick(); // assuming this method triggers the search
+        }
+    }
     toggleSearch = () => {
         this.setState(prevState => ({
             isSearchBoxVisible: !prevState.isSearchBoxVisible,
@@ -227,6 +231,7 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
                     type='text'
                     value={searchQuery}
                     onChange={this.handleInputChange}
+                    onKeyPress={this.handleKeyPress}
                     placeholder="Search BioWeb..."
                     style={{padding: '8px', border: 'none', outline: 'none' }}
                   //  onBlur={() => this.setState({ isSearchBoxExpanded: false })}
