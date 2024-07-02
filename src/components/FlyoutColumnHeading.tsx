@@ -45,6 +45,7 @@ export class FlyoutColumnHeading extends React.Component<IFlyoutColumnHeadingPro
                     className={`${styles.headingLink} ms-fontWeight-semibold ms-fontSize-m-plus`}
                     href={item.url} style={{ cursor: item.url ? 'pointer' : 'default' }}
                     target={item.openInNewTab ? "_blank" : ""}
+                    data-interception={item.openInNewTab ? "off" : "on"}
                 >
                     {item.text}
                 </Link>

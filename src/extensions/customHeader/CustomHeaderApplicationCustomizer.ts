@@ -30,36 +30,37 @@ export default class CustomHeaderApplicationCustomizer
   public onInit(): Promise<void> {
     if (!this.headerPlaceholder) {
       this.headerPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top, { onDispose: this._onDispose });
-   
+
       if (this.headerPlaceholder && this.headerPlaceholder.domElement) {
         console.log("PageHeader placeholder is OK.");
-  
-        MegaMenuService.runListprovision(this.context).then((response) => {
-         MegaMenuService.getMenuItems("https://conais.sharepoint.com/sites/SPFXDEV/")
-     //   MegaMenuService.getMenuItems("https://bmrn.sharepoint.com/sites/bioweb-home/")
-         
-            .then((topLevelMenus: TopLevelMenu[]) => {
-              const element: React.ReactElement<IMegaMenuProps> = React.createElement(
-                MegaMenu,
-                {
-                  topLevelMenuItems: topLevelMenus,
-                  spfxContext: this.context,
-                });
-  
-              ReactDom.render(element, this.headerPlaceholder.domElement);
-            })
-            .catch((error: any) => {
-              console.error(`Error trying to read menu items or render component : ${error.message}`);
-            });
-        });
+
+        // MegaMenuService.runListprovision(this.context).then((response) => {  // this is for list provision
+
+        // MegaMenuService.getMenuItems("https://conais.sharepoint.com/sites/SPFXDEV/")
+        MegaMenuService.getMenuItems("https://bmrn.sharepoint.com/sites/bioweb-home/")
+
+          .then((topLevelMenus: TopLevelMenu[]) => {
+            const element: React.ReactElement<IMegaMenuProps> = React.createElement(
+              MegaMenu,
+              {
+                topLevelMenuItems: topLevelMenus,
+                spfxContext: this.context,
+              });
+
+            ReactDom.render(element, this.headerPlaceholder.domElement);
+          })
+          .catch((error: any) => {
+            console.error(`Error trying to read menu items or render component : ${error.message}`);
+          });
+        // });
       } else {
         console.error('PageHeader placeholder not found or already populated.');
       }
     }
-  
+
     return Promise.resolve();
   }
-  
+
 
 
   @override

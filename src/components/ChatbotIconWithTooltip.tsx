@@ -10,7 +10,7 @@ interface ChatbotIconWithTooltipProps {
 const ChatbotIconWithTooltip: React.FC<ChatbotIconWithTooltipProps> = ({ }) => {
     const handleClick = () => {
         // Open the chatbot page in a new tab
-        const chatbotUrl = `https://bmrn.sharepoint.com/sites/biowebdev1/pages/testchatbot.aspx`;
+        const chatbotUrl = `https://bmrn.sharepoint.com/sites/bioweb-home/sitepages/BioChat.aspx`;
         window.open(chatbotUrl, '_blank');
     };
 

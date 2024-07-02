@@ -27,7 +27,7 @@ export class MegaMenuService {
       const requiredLists = lists.filter((ele: any) => 
         [MegaMenuService.level1ListName, MegaMenuService.level2ListName, MegaMenuService.level3ListName].includes(ele.Title));
   
-      if (requiredLists.length === 3) {
+      if (requiredLists.length === 0) {
         // All necessary lists exist
         return Promise.resolve("All required lists already exist.");
       }
@@ -137,7 +137,8 @@ export class MegaMenuService {
                 id: item.Id,
                 text: item.Title,
                 columns: [],
-                url:item.link ? item.link.Url : ""
+                url:item.link ? item.link.Url : "",
+                openInNewTab: item.openInNewTab
             };
 
             level1Dictionary[newItem.id] = newItem;
@@ -152,10 +153,11 @@ export class MegaMenuService {
                 heading: {
                     text: item.Title,
                     url: item.link ? item.link.Url : "",
-                    openInNewTab: item.OpenInNewTab
+                    openInNewTab: item.openInNewTab
                 },
                 links: [],
-                level1ParentId: item.level1ItemId
+                level1ParentId: item.level1ItemId,
+                openInNewTab: item.openInNewTab
             };
 
             level2Dictionary[newItem.id] = newItem;
@@ -169,7 +171,7 @@ export class MegaMenuService {
                 level2ParentId: item.level2ItemId,
                 text: item.Title,
                 url: item.link.Url,
-                openInNewTab: item.OpenInNewTab
+                openInNewTab: item.openInNewTab
             };
             return newItem;
         });

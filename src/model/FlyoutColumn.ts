@@ -7,4 +7,5 @@ export class FlyoutColumn {
     public heading?:Link;
     public links?:Link[];
     public url?:string;
+    public openInNewTab?:boolean;
 }

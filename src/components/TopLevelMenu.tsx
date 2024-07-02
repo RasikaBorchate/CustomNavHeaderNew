@@ -34,7 +34,13 @@ export class TopLevelMenu extends React.Component<ITopLevelMenuProps, ITopLevelM
     handleClick = () => {
         const { topLevelMenu } = this.props;
         if (topLevelMenu.url) {
-            window.location.href = topLevelMenu.url;
+            if (topLevelMenu.openInNewTab) {
+                // Opens the URL in a new browser tab
+                window.open(topLevelMenu.url, '_blank');
+            } else {
+                // Navigates in the same tab
+                window.location.href = topLevelMenu.url;
+            }
         } else {
             this.toggleFlyout();
         }

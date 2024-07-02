@@ -6,4 +6,5 @@ export class TopLevelMenu {
     public text: string;
     public columns?: FlyoutColumn[];
     public url?:string;
+    public openInNewTab?:boolean;
 }
