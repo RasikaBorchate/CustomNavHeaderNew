@@ -128,7 +128,7 @@ button:hover,
 }
 .app-list{
   scroll-margin-right:10px;
-  max-height: 360px;
+  max-height: 500px;
   overflow-y: auto;
   overflow-x: hidden;
   &::-webkit-scrollbar {
@@ -266,4 +266,19 @@ button:hover,
   .viewtogglebuttons {
     display: none;
   }
+}
+
+.dragHandle {
+  cursor: grab; /* Style to indicate this can be used to drag the item */
+ 
+}
+.dragIconStyle{
+  float: left;
+  margin: 25px 10px 0px;
+}
+.dragIcon {
+  display: inline-block;
+  width: 20px; /* Example size */
+  height: 20px; /* Example size */
+  background-color: #ccc; /* Example color */
 }

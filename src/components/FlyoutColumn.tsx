@@ -14,6 +14,7 @@ export interface IFlyoutColumnProps {
 
 export interface IFlyoutColumnState {
     showLinksWhenMobile: boolean;
+    showFlyout:boolean;
 }
 
 @withResponsiveMode
@@ -25,10 +26,14 @@ export class FlyoutColumn extends React.Component<IFlyoutColumnProps, IFlyoutCol
         this.handleHeadingTouched = this.handleHeadingTouched.bind(this);
 
         this.state = {
-            showLinksWhenMobile: false
+            showLinksWhenMobile: false,
+            showFlyout:false,
         };
     }
-
+    closeFlyout = () => {
+        // Assuming 'showFlyout' controls the visibility of the flyout
+        this.setState({ showFlyout: false });
+    };
     public render(): React.ReactElement<IFlyoutColumnProps> {
 
         var responsiveMode = this.props.responsiveMode;
@@ -41,6 +46,7 @@ export class FlyoutColumn extends React.Component<IFlyoutColumnProps, IFlyoutCol
             <MenuLink
                 item={item}
                 mobileMode={mobileMode}
+                closeFlyout={this.closeFlyout}  // Passing the method down
             >
             </MenuLink>
         ) : null;
@@ -56,6 +62,7 @@ export class FlyoutColumn extends React.Component<IFlyoutColumnProps, IFlyoutCol
                     item={this.props.header}
                     mobileMode={mobileMode}
                     headingTouched={this.handleHeadingTouched}
+                    closeFlyout={this.closeFlyout}  // Passing the method down
                 ></FlyoutColumnHeading>
                 {links}
             </div>

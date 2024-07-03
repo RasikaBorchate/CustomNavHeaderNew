@@ -28,6 +28,15 @@ export default class CustomHeaderApplicationCustomizer
 
   @override
   public onInit(): Promise<void> {
+    // Check if the current site matches the specific paths
+    const normalizedPath = window.location.pathname.toLowerCase(); // Normalize and remove trailing slash
+
+    if (normalizedPath.startsWith('/sites/bioweb-home') || normalizedPath.startsWith('/sites/bioweb-news')) {
+       const spSiteHeader = document.getElementById('spSiteHeader');
+      if (spSiteHeader) {
+        spSiteHeader.style.display = 'none';  // Hide the 'spSiteHeader' if on specific sites
+      }
+    }
     if (!this.headerPlaceholder) {
       this.headerPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top, { onDispose: this._onDispose });
 
@@ -36,8 +45,8 @@ export default class CustomHeaderApplicationCustomizer
 
         // MegaMenuService.runListprovision(this.context).then((response) => {  // this is for list provision
 
-        // MegaMenuService.getMenuItems("https://conais.sharepoint.com/sites/SPFXDEV/")
-        MegaMenuService.getMenuItems("https://bmrn.sharepoint.com/sites/bioweb-home/")
+      //  MegaMenuService.getMenuItems("https://conais.sharepoint.com/sites/SPFXDEV/")
+           MegaMenuService.getMenuItems("https://bmrn.sharepoint.com/sites/bioweb-home/")
 
           .then((topLevelMenus: TopLevelMenu[]) => {
             const element: React.ReactElement<IMegaMenuProps> = React.createElement(
@@ -68,8 +77,6 @@ export default class CustomHeaderApplicationCustomizer
 
     if (!this.headerPlaceholder) {
       this.headerPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top);
-
-
     }
 
 

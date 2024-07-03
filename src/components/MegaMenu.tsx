@@ -77,6 +77,20 @@ export class MegaMenu extends React.Component<IMegaMenuProps, IMegaMenuState> {
             this.setState({ showFlyout: false, selectedTopLevelItem: null });
         }
     }
+    handleLogoClick = () => {
+     
+        const homeUrl = "https://bmrn.sharepoint.com/sites/bioweb-home";
+    
+        // Update state to close any open menus
+        this.setState({
+            showFlyout: false,
+            showTopLevelMenuItemsWhenMobile: false
+        }, () => {
+            // Redirect after state update
+            window.location.href = homeUrl;
+        });
+    }
+    
     handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             this.handleSearchClick(); // assuming this method triggers the search
@@ -124,7 +138,7 @@ export class MegaMenu extends React.Component<IMegaMenuProps, IMegaMenuState> {
     public render(): React.ReactElement<IMegaMenuProps> {
         const { responsiveMode, spfxContext, topLevelMenuItems } = this.props;
         const { showFlyout, selectedTopLevelItem, showTopLevelMenuItemsWhenMobile, isSearchBoxExpanded, searchQuery } = this.state;
-        const homeUrl = "https://bmrn.sharepoint.com/sites/bioweb-home";
+       
         const mobileMode = (responsiveMode ?? ResponsiveMode.xLarge) < ResponsiveMode.xLarge;
 
         const topLevelItems = topLevelMenuItems.map(item => (
@@ -180,10 +194,10 @@ export class MegaMenu extends React.Component<IMegaMenuProps, IMegaMenuState> {
                     <div className={`ms-Grid ${mobileMode ? "ms-slideDownIn10" : ""} ${styles.container}`}>
                         <div className={`ms-Grid-row ${styles.headerMenu}`}>
                             {!mobileMode && (
-                                <div className={`ms-Grid-col ${styles.headerMenuLogo}`}>
-                                    <a href={homeUrl} className={styles.logoHomeUrL}>
+                                <div className={`ms-Grid-col ${styles.headerMenuLogo} ${styles.logoHomeUrL}`} onClick={this.handleLogoClick}>
+                                    
                                         <img src={require('../common/img/biomarin.svg')} alt="BioWeb" title="BioWeb" className={styles.logo} />
-                                    </a>
+                                   
                                 </div>
                             )}
                             <div className={`ms-Grid-col ms-sm12 ms-md12 ms-lg6 ${styles.middleMenu}`} >
@@ -213,6 +227,7 @@ export class MegaMenu extends React.Component<IMegaMenuProps, IMegaMenuState> {
                         handleFocused={this.handleFocusedFlyout}
                         handleLostFocus={this.handleLostFocusFlyout}
                         topLevelItem={selectedTopLevelItem}
+                        
                     />
                 )}
                 <AlertBar spfxContext={spfxContext} />

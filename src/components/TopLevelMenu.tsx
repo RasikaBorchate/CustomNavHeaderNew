@@ -40,6 +40,9 @@ export class TopLevelMenu extends React.Component<ITopLevelMenuProps, ITopLevelM
             } else {
                 // Navigates in the same tab
                 window.location.href = topLevelMenu.url;
+                this.state = {
+                    showFlyout: false,
+                };
             }
         } else {
             this.toggleFlyout();

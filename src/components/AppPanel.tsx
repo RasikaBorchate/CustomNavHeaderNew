@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
-import { DefaultPalette, IconButton, IStackItemStyles, IStackStyles, IStackTokens, PrimaryButton, Stack, TextField, TooltipHost } from 'office-ui-fabric-react';
+import { DefaultPalette, Icon, IconButton, IStackItemStyles, IStackStyles, IStackTokens, PrimaryButton, Stack, TextField, TooltipHost } from 'office-ui-fabric-react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import styles from './AppPanel.module.scss';
 import { DropResult } from 'react-beautiful-dnd';
@@ -20,6 +20,7 @@ export interface IAppItem {
   Title: string;
   Icon: string;
   Link: any;
+  Default: any;
   OpenInNewTab: any;
 }
 
@@ -85,6 +86,8 @@ export interface IAppPanelState {
   searchText: string;
   catalogApps: IAppItem[]; // Add this to store apps from the app catalog
   viewType: 'list' | 'grid';
+  viewAllLink: any
+  defaultCheckedApps: IAppItem[],  // Added to store default apps
 }
 
 export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelState> {
@@ -100,16 +103,43 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
       userPreferences: "", // Initial state
       catalogApps: [],
       viewType: 'list', // default view
+      viewAllLink: '',
+      defaultCheckedApps: [],  // Added to store default apps
     };
   }
 
   componentDidMount() {
     this.fetchUserPreferences();
     this.fetchDefaultApps(); // Fetch catalog apps separately
+    this.fetchViewAllLink(); // Fetch the view all link when component mounts
   }
+  fetchViewAllLink = async () => {
+    const url = `${API_URLS.BASE_URL}/_api/web/lists/getbytitle('BioWeb Config')/items?$select=Title,Value`;
+    try {
+      const response = await fetch(url, {
+        headers: {
+          'Accept': 'application/json;odata=verbose',
+          'Content-Type': 'application/json;odata=verbose',
+          'credentials': 'include'
+        }
+      });
+      if (!response.ok) throw new Error('Failed to fetch');
+      const result = await response.json();
+      const items = result.d.results;
+      const viewAllItem = items.find((item: any) => item.Title === 'ViewAllUrl');
+
+      if (viewAllItem) {
+        this.setState({ viewAllLink: viewAllItem.Value });
+      } else {
+        console.error("No 'ViewAllUrl' item found in the BioWeb Config list");
+      }
+    } catch (error) {
+      console.error("Error fetching the view all link:", error);
+    }
+  };
 
   fetchDefaultApps = async () => {
-    const url = `${API_URLS.BASE_URL}/_api/web/lists/getbytitle('BioWeb Applications')/items?select=Title,Icon,Link`;
+    const url = `${API_URLS.BASE_URL}/_api/web/lists/getbytitle('BioWeb Applications')/items?$orderBy=Title asc&$select=Title,Icon,Link,Default,OpenInNewTab`;
     try {
       const response = await fetch(url, {
         headers: {
@@ -121,13 +151,16 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
       if (!response.ok) throw new Error('Failed to fetch');
       const result = await response.json();
       this.setState({ catalogApps: result.d.results });
+      const defaultCheckedApps = result.d.results.filter((app: any) => app.Default === true); // Filter to get only default apps
+      this.setState({ defaultCheckedApps: defaultCheckedApps }); // Update the state with filtered default apps
+
     } catch (error) {
       console.error("Error fetching apps from catalog:", error);
     }
   };
 
   private fetchApps = async (): Promise<void> => {
-    const listUrl = `${API_URLS.BASE_URL}/_api/web/lists/getbytitle('BioWeb Applications')/items?$select=Title,Icon,Link`;
+    const listUrl = `${API_URLS.BASE_URL}/_api/web/lists/getbytitle('BioWeb Applications')/items?$orderBy=Title asc&$select=Title,Icon,Link,Default,OpenInNewTab`;
 
     try {
       const response = await fetch(listUrl, {
@@ -380,7 +413,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
               iconProps={{ iconName: app.Icon }}
               title={app.Title}
               ariaLabel={app.Title}
-              onClick={() => {/* Define your click handler function here */ }}
+
               className={styles['app-icon']}
               styles={{
                 root: {
@@ -439,7 +472,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
   };
 
   render(): React.ReactElement<IAppPanelProps> {
-    const { showPanel, showEditDialog, searchText, selectedApps, catalogApps, viewType } = this.state;
+    const { showPanel, showEditDialog, searchText, selectedApps, catalogApps, viewType, defaultCheckedApps } = this.state;
     let contentToShow: JSX.Element | JSX.Element[];
     let buttonText = showEditDialog ? "Save" : "Edit my applications";
 
@@ -464,28 +497,37 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
         </>
       );
     } else if (selectedApps.length === 0) {
-      contentToShow = (
-        <Stack horizontal styles={appstackStyles}>
-          <Stack.Item grow={3} styles={appstackItemStyles}>
-            <p style={{ fontSize: '14px', padding: '20px 30px' }}>You have not added<br></br>
-              any applications yet</p>
-          </Stack.Item>
-          <Stack.Item grow={3} styles={appstackItemStyles}>
-            <img src={require('../common/img/appicon.png')} alt="app icon" style={{ marginTop: 'auto' }} />
-          </Stack.Item>
-        </Stack>
-      );
+
+      if (defaultCheckedApps.length > 0) {
+        contentToShow = defaultCheckedApps.map((app, index) => this.renderAppItem(app, index, viewType === 'grid'));
+
+      }
+      else {
+        contentToShow = (
+          <Stack horizontal styles={appstackStyles}>
+            <Stack.Item grow={3} styles={appstackItemStyles}>
+              <p style={{ fontSize: '14px', padding: '20px 30px' }}>You have not added<br></br>
+                any applications yet</p>
+            </Stack.Item>
+            <Stack.Item grow={3} styles={appstackItemStyles}>
+              <img src={require('../common/img/appicon.png')} alt="app icon" style={{ marginTop: 'auto' }} />
+            </Stack.Item>
+          </Stack>
+        );
+
+      }
       buttonText = "Add application";
-    } else {
+    }
+    else {
       contentToShow = selectedApps.map((app, index) => this.renderAppItem(app, index, viewType === 'grid'));
     }
 
     return (
       <>
-       <TooltipHost content="My Apps">
-        <div style={{ cursor: 'pointer' }}>
-          <Grid16Regular title='Open App Panel' style={{ height: '30px', width: '30px', marginRight: '1px', cursor: 'pointer' }} onClick={this._togglePanel} />
-        </div>
+        <TooltipHost content="My Apps">
+          <div style={{ cursor: 'pointer' }}>
+            <Grid16Regular title='Open App Panel' style={{ height: '30px', width: '30px', marginRight: '1px', cursor: 'pointer' }} onClick={this._togglePanel} />
+          </div>
         </TooltipHost>
         <Panel
           isOpen={showPanel}
@@ -495,7 +537,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
           headerText="Applications"
           className={styles.apppanel}
         >
-          {(selectedApps.length != 0 || showEditDialog) && <div className={styles.viewtogglebuttons} style={{ textAlign: 'right' }}>
+          {(selectedApps.length != 0 || catalogApps.length != 0 || showEditDialog) && <div className={styles.viewtogglebuttons} style={{ textAlign: 'right' }}>
             <span title="Grid View" style={{ cursor: 'pointer' }}>
               <GridDots20Regular
                 title='Grid view'
@@ -523,7 +565,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
             />
           )}
 
-          {!showEditDialog && <div className={styles['app-list'] + ` ${this.state.viewType === 'grid' ? styles.appitemsgrid : ''}`} style={{ marginBottom: '18px', paddingBottom: '12px' }}>
+          {(!showEditDialog && selectedApps.length > 0) && <div className={styles['app-list'] + ` ${this.state.viewType === 'grid' ? styles.appitemsgrid : ''}`} style={{ marginBottom: '18px', paddingBottom: '12px' }}>
             <div className={styles['app-list'] + ` ${viewType === 'grid' ? styles.appitemsgrid : ''}`}>
               <DragDropContext onDragEnd={this.onDragEnd}>
                 <Droppable droppableId="droppable">
@@ -532,8 +574,16 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
                       {selectedApps.map((app, index) => (
                         <Draggable key={app.Title} draggableId={app.Title} index={index}>
                           {(provided) => (
-                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                              {this.renderAppItem(app, index, viewType === 'grid')}
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps} // Apply draggableProps to the container
+
+                            >
+                              <div className={styles.dragHandle} {...provided.dragHandleProps}>
+                                {/* Drag handle area could just be an icon or a small part of the item */}
+                                <TooltipHost content={`Drag ${app.Title}`}><Icon iconName='GripperDotsVertical' aria-label='Drag the app' className={styles.dragIconStyle} /></TooltipHost> {this.renderAppItem(app, index, viewType === 'grid')}
+                              </div>
+
                             </div>
                           )}
                         </Draggable>
@@ -548,14 +598,19 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
           {(showEditDialog || selectedApps.length === 0) && <div className={styles['app-list'] + ` ${this.state.viewType === 'grid' ? styles.appitemsgrid : ''}`} style={{ borderBottom: '1px solid #ccc', marginBottom: '18px' }}>
             {contentToShow}
           </div>}
-          <PrimaryButton
-            text={buttonText}
-            onClick={this._toggleEditMode}
-            className={styles.panelappbutton}
-            styles={{
-              root: { marginLeft: '5px', float: 'right' } // Apply margin-left of 10px
-            }}
-          />
+          <div>
+            {this.state.viewAllLink && (
+              <a href={this.state.viewAllLink} target="_blank" style={{ margin: '10px', display: 'block', float: 'left', color: '#663399', fontSize: '18px', textDecoration: 'none' }}>View all applications</a>
+            )}
+            <PrimaryButton
+              text={buttonText}
+              onClick={this._toggleEditMode}
+              className={styles.panelappbutton}
+              styles={{
+                root: { marginLeft: '5px', float: 'right' } // Apply margin-left of 10px
+              }}
+            />
+          </div>
         </Panel>
       </>
     );

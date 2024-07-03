@@ -76,7 +76,18 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
             });
         }
     };
-
+    handleLogoClick = () => {
+       
+        this.setState({
+            isMenuOpen: false,
+            isFlyoutOpen: false,
+            isSearchBoxExpanded: false,
+            isSearchBoxVisible: false,
+            isAppPanelOpen: false
+        }, () => {
+            window.location.href = "https://bmrn.sharepoint.com/sites/bioweb-home"; // Redirect after state updates
+        });
+    };
     toggleMenu = () => {
         this.setState(prevState => ({
             isMenuOpen: !prevState.isMenuOpen,
@@ -215,7 +226,7 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
     public render(): React.ReactElement<IMobileMenuProps> {
         const { isMenuOpen, isFlyoutOpen, isSearchBoxExpanded, isAppPanelOpen, selectedMenuItem, selectedSubMenuItem, searchQuery } = this.state;
         const iconClassName = isMenuOpen ? "ms-Icon ms-Icon--Cancel" : "ms-Icon ms-Icon--GlobalNavButton";
-        const homeUrl = "https://bmrn.sharepoint.com/sites/bioweb-home";
+      
         const { topLevelMenuItems } = this.props;
         const iconClassNameFlyout = isFlyoutOpen ? "ms-Icon ms-Icon--ChevronUpSmall" : "ms-Icon ms-Icon--More";
 
@@ -260,8 +271,8 @@ export class MobileMenu extends React.Component<IMobileMenuProps, IMobileMenuSta
                     <div className={`ms-Grid-col ms-sm1 ${styles.togglemenumobile}`}>
                         <i className={iconClassName} aria-hidden="true" style={{ cursor: 'pointer' }} onClick={this.toggleMenu} title='Toggle Navigation Pane' />
                     </div>
-                    <div className={`ms-Grid-col ms-sm7 ${styles.logomobile}`}>
-                        <a href={homeUrl} className={styles1.logoHomeUrL}><img src={require('../common/img/biomarin.svg')} alt="Biomarin" style={{ width: '120px' }} /></a>
+                    <div className={`ms-Grid-col ms-sm7 ${styles.logomobile} ${styles1.logoHomeUrL}`} onClick={this.handleLogoClick}>
+                         <img src={require('../common/img/biomarin.svg')} alt="BioWeb" style={{ width: '120px' }} />
                     </div>
                     <div className={`ms-Grid-col ms-sm4 ${styles.righticonmobile}`}>
                         <i className={iconClassNameFlyout} aria-hidden="true" style={{ cursor: 'pointer' }} onClick={this.toggleFlyout} title='Toggle more' />
