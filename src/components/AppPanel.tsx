@@ -140,24 +140,89 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
 
   fetchDefaultApps = async () => {
     const url = `${API_URLS.BASE_URL}/_api/web/lists/getbytitle('BioWeb Applications')/items?$orderBy=Title asc&$select=Title,Icon,Link,Default,OpenInNewTab`;
-    try {
-      const response = await fetch(url, {
-        headers: {
-          'Accept': 'application/json;odata=verbose',
-          'Content-Type': 'application/json;odata=verbose',
-          'credentials': 'include'
-        }
-      });
-      if (!response.ok) throw new Error('Failed to fetch');
-      const result = await response.json();
-      this.setState({ catalogApps: result.d.results });
-      const defaultCheckedApps = result.d.results.filter((app: any) => app.Default === true); // Filter to get only default apps
-      this.setState({ defaultCheckedApps: defaultCheckedApps }); // Update the state with filtered default apps
+    const response = await fetch(url, {
+      headers: {
+        'Accept': 'application/json;odata=verbose',
+        'Content-Type': 'application/json;odata=verbose',
+        'credentials': 'include'
+      }
+    });
+    if (!response.ok) throw new Error('Failed to fetch');
+    const result = await response.json();
+    const defaultCheckedApps = result.d.results.filter((app:any) => app.Default === true);
+    this.setState({ catalogApps: result.d.results, defaultCheckedApps });
+  };
 
-    } catch (error) {
-      console.error("Error fetching apps from catalog:", error);
+  fetchUserPreferences = async () => {
+    const userId = await this.getCurrentUserId();
+    if (userId === -1) {
+      console.error("Invalid user ID");
+      return;
+    }
+
+    const listUrl = `${API_URLS.BASE_URL}/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items?$filter=UserIdId eq ${userId}&$select=Preferences,ViewType`;
+    const response = await fetch(listUrl, {
+      headers: {
+        'Accept': 'application/json;odata=verbose',
+        'Content-Type': 'application/json;odata=verbose'
+      },
+      credentials: 'include'
+    });
+
+    if (!response.ok) throw new Error(`Failed to fetch user preferences: ${response.statusText}`);
+    const result = await response.json();
+    if (result.d.results.length > 0) {
+      const userPreferences = JSON.parse(result.d.results[0].Preferences);
+      this.setState({ userPreferences: result.d.results[0].Preferences, selectedApps: userPreferences, viewType: result.d.results[0].ViewType }, this.fetchApps);
+    } else {
+      // No preferences found, save default apps as preferences if any
+      if (this.state.defaultCheckedApps.length > 0) {
+        this.saveDefaultPreferences(userId);
+      }
     }
   };
+
+  saveDefaultPreferences = async (userId:any) => {
+    const preferencesToSave = JSON.stringify(this.state.defaultCheckedApps);
+    const viewTypeToSave = 'list'; // default viewType for new users
+
+    const addUrl = `${API_URLS.BASE_URL}/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items`;
+    const digestResponse = await fetch(`${API_URLS.BASE_URL}/_api/contextinfo`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json;odata=verbose',
+        'Content-Type': 'application/json;odata=verbose'
+      },
+      credentials: 'include'
+    });
+    const digestResult = await digestResponse.json();
+    const requestDigest = digestResult.d.GetContextWebInformation.FormDigestValue;
+
+    const response = await fetch(addUrl, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json;odata=verbose',
+        'Content-Type': 'application/json;odata=verbose',
+        'X-RequestDigest': requestDigest
+      },
+      body: JSON.stringify({
+        UserIdId: userId,
+        Preferences: preferencesToSave,
+        ViewType: viewTypeToSave,
+        "__metadata": { "type": "SP.Data.BioWeb_x0020_Applications_x0020__x0020_User_x0020_PreferencesListItem" }
+      }),
+      credentials: 'include'
+    });
+
+    if (!response.ok) {
+      console.error("Failed to save default user preferences:", response.statusText);
+      return;
+    }
+    console.log("Default preferences saved successfully.");
+    this.setState({ userPreferences: preferencesToSave, selectedApps: this.state.defaultCheckedApps, viewType: viewTypeToSave });
+  };
+
+  
 
   private fetchApps = async (): Promise<void> => {
     const listUrl = `${API_URLS.BASE_URL}/_api/web/lists/getbytitle('BioWeb Applications')/items?$orderBy=Title asc&$select=Title,Icon,Link,Default,OpenInNewTab`;
@@ -209,7 +274,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
     }
   };
 
-  private fetchUserPreferences = async (): Promise<void> => {
+ /* private fetchUserPreferences = async (): Promise<void> => {
     const userId = await this.getCurrentUserId();
     if (userId === -1) {
       this.fetchDefaultApps(); // Fetch default apps if unable to obtain valid user ID
@@ -243,7 +308,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
       console.error("Error fetching user preferences:", error);
       this.fetchDefaultApps(); // Fetch default apps as a fallback
     }
-  };
+  };*/
 
   saveUserPreferences = async (): Promise<void> => {
     const userId = await this.getCurrentUserId();
@@ -363,6 +428,9 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
   };
 
   private _toggleEditMode = (): void => {
+    if(this.state.showEditDialog){
+      this.saveUserPreferences();
+    }
     this.setState(prevState => ({
       showEditDialog: !prevState.showEditDialog,
     }));
@@ -372,11 +440,11 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
     if (add) {
       this.setState(prevState => ({
         selectedApps: [...prevState.selectedApps, app]
-      }), this.saveUserPreferences);
+      }));
     } else {
       this.setState(prevState => ({
         selectedApps: prevState.selectedApps.filter(selectedApp => selectedApp.Title !== app.Title)
-      }), this.saveUserPreferences);
+      }));
     }
   };
 
@@ -435,7 +503,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
             />
           </Stack.Item>
           <Stack.Item grow={4} styles={stackItemStyles}>
-            <a href={app.Link.Url}
+            <a href={app.Link ? app.Link.Url : ''}
               target={targetValue}
               data-interception={interceptionValue} style={{ cursor: 'pointer', textDecoration: 'none' }}><span className="app-name" style={{ color: '#3C3C3C' }}>{app.Title}</span></a>
           </Stack.Item>
@@ -600,7 +668,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
           </div>}
           <div>
             {this.state.viewAllLink && (
-              <a href={this.state.viewAllLink} target="_blank" style={{ margin: '10px', display: 'block', float: 'left', color: '#663399', fontSize: '18px', textDecoration: 'none' }}>View all applications</a>
+              <a href={this.state.viewAllLink} target="_blank" data-interception="off" style={{ margin: '10px', display: 'block', float: 'left', color: '#663399', fontSize: '14px', textDecoration: 'none' }}>View all applications</a>
             )}
             <PrimaryButton
               text={buttonText}
