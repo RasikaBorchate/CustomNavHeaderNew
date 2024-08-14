@@ -8,11 +8,7 @@ import { MegaMenu, IMegaMenuProps } from '../../components/MegaMenu';
 import { MegaMenuService } from '../../service/MegaMenuService';
 import { TopLevelMenu } from '../../model/TopLevelMenu';
 require('./css/style')
-/**
- * If your command set uses the ClientSideComponentProperties JSON input,
- * it will be deserialized into the BaseExtension.properties object.
- * You can define an interface to describe it.
- */
+
 export interface ICustomHeaderApplicationCustomizerProperties {
   // This is an example; replace with your own property
   testMessage: string;
@@ -31,8 +27,8 @@ export default class CustomHeaderApplicationCustomizer
     // Check if the current site matches the specific paths
     const normalizedPath = window.location.pathname.toLowerCase(); // Normalize and remove trailing slash
 
-    if (normalizedPath.startsWith('/sites/bioweb-home') || normalizedPath.startsWith('/sites/bioweb-news')) {
-       const spSiteHeader = document.getElementById('spSiteHeader');
+    if (normalizedPath.startsWith('/sites/bioweb-home') || normalizedPath.startsWith('/sites/bioweb-news') || normalizedPath.startsWith('/sites/bioweb-dev')) {
+      const spSiteHeader = document.getElementById('spSiteHeader');
       if (spSiteHeader) {
         spSiteHeader.style.display = 'none';  // Hide the 'spSiteHeader' if on specific sites
       }
@@ -45,8 +41,8 @@ export default class CustomHeaderApplicationCustomizer
 
         // MegaMenuService.runListprovision(this.context).then((response) => {  // this is for list provision
 
-      //  MegaMenuService.getMenuItems("https://conais.sharepoint.com/sites/SPFXDEV/")
-           MegaMenuService.getMenuItems("https://bmrn.sharepoint.com/sites/bioweb-home/")
+         MegaMenuService.getMenuItems("https://conais.sharepoint.com/sites/SPFXDEV/")
+     //    MegaMenuService.getMenuItems("https://bmrn.sharepoint.com/sites/bioweb-home/")
 
           .then((topLevelMenus: TopLevelMenu[]) => {
             const element: React.ReactElement<IMegaMenuProps> = React.createElement(

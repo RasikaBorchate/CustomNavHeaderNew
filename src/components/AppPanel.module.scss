@@ -3,44 +3,52 @@
   padding: 10px;
   overflow: auto;
 }
-.apppanel{
-  > div:nth-child(1){
-   // background: rgba(#F1F1F1,0.8);
-  //  backdrop-filter: blur(2px);
-   // left: 48px;
-   // top:118px;
-    @media(max-width:1023px){
-    //  top: 179px;
-    //  left: 0;
+
+.apppanel {
+  >div:nth-child(1) {
+
+    // background: rgba(#F1F1F1,0.8);
+    //  backdrop-filter: blur(2px);
+    // left: 48px;
+    // top:118px;
+    @media(max-width:1023px) {
+      //  top: 179px;
+      //  left: 0;
     }
   }
-  > div:nth-child(2){
+
+  >div:nth-child(2) {
     height: auto !important;
     inset: auto;
     top: 135px;
     width: 465px;
     right: 15px;
     padding-bottom: 30px;
-    [data-is-scrollable]{
+
+    [data-is-scrollable] {
       overflow: visible;
     }
-    @media(max-width:1023px){
-      top:195px;
+
+    @media(max-width:1023px) {
+      top: 195px;
     }
-    @media(max-width:639px){
-      top:178px;
+
+    @media(max-width:639px) {
+      top: 178px;
       right: 0;
-      border-top:1px solid #CFCFCF;
-      box-shadow: 0 4px 16px 0 rgba(#000,0.05);
+      border-top: 1px solid #CFCFCF;
+      box-shadow: 0 4px 16px 0 rgba(#000, 0.05);
       width: 100%;
     }
   }
-  h3{
+
+  h3 {
     margin-bottom: 10px;
     font-weight: 400;
     font-size: 14px;
   }
 }
+
 *[class*="app-grid"]>div,
 .app-grid>div {
   display: inline-block;
@@ -48,10 +56,12 @@
 }
 
 .appItemGrid {
-  display: inline-block;
-  grid-template-columns: repeat(2, 1fr); /* Create two columns for grid view */
-  gap: 20px; /* Spacing between items */
-  width: 50%;
+  display: flow-root;
+  grid-template-columns: repeat(2, 1fr);
+  /* Create two columns for grid view */
+  gap: 20px;
+  /* Spacing between items */
+
 }
 
 .appItemList {
@@ -59,16 +69,19 @@
   flex-direction: column;
 }
 
-.app-icon i{ 
+.app-icon i {
   font-size: 20px;
   width: 20px;
-  color:#212121!important;
+  color: #212121 !important;
   height: 20px;
 }
-.app-icon:hover i,.Add:hover i{
-  color:#212121!important;
+
+.app-icon:hover i,
+.Add:hover i {
+  color: #212121 !important;
 }
-.appItemList > div{
+
+.appItemList>div {
   margin: 0 -5px;
   padding-bottom: 12px;
 }
@@ -81,27 +94,36 @@
 }
 
 .appIcon {
-  font-size: 24px; /* Size of app icons */
-  color: #666; /* Color of app icons */
-  margin-right: 12px; /* Spacing to the right of icons */
+  font-size: 24px;
+  /* Size of app icons */
+  color: #666;
+  /* Color of app icons */
+  margin-right: 12px;
+  /* Spacing to the right of icons */
 }
 
 .appName {
-  font-size: 16px; /* Size of app names */
-  color: #333; /* Color of app names */
-  flex-grow: 1; /* Allow names to fill available space */
+  font-size: 16px;
+  /* Size of app names */
+  color: #333;
+  /* Color of app names */
+  flex-grow: 1;
+  /* Allow names to fill available space */
 }
 
 .editAppBtn,
 .deleteAppBtn {
-  margin-left: auto; /* Push buttons to the far right */
-  color: #ff4136; /* Red color for delete button */
+  margin-left: auto;
+  /* Push buttons to the far right */
+  color: #ff4136;
+  /* Red color for delete button */
 }
 
 // Media query for responsive design
 @media (max-width: 768px) {
   .appItemGrid {
-    grid-template-columns: 1fr; /* Single column on small screens */
+    grid-template-columns: 1fr;
+    /* Single column on small screens */
   }
 }
 
@@ -126,127 +148,186 @@ button:hover,
 .appName:hover {
   opacity: 0.8;
 }
-.app-list{
-  scroll-margin-right:10px;
-  max-height: 500px;
+
+
+.viewAllApplicationLink{
+  margin: 10px;
+  display: block;
+  float: left;
+  columns: #663399;
+  font-size: 14px;
+  text-decoration: none !important;
+
+}
+
+
+
+.app-list {
+  scroll-margin-right: 10px;
+  height: calc(67vh);
   overflow-y: auto;
   overflow-x: hidden;
+
+  @media(max-width:768px) {
+    height: calc(62vh);
+  }
+
+  @media(max-width:640px) {
+    height: calc(52vh);
+  }
+
+  @media(max-width:480px) {
+    height: calc(60vh);
+  }
+
   &::-webkit-scrollbar {
     width: 7px;
   }
+
   &::-webkit-scrollbar-track {
-      background: rgba(#000,0.1);
-      border-left: 3px white solid;
+    background: rgba(#000, 0.1);
+    border-left: 3px white solid;
   }
+
   &::-webkit-scrollbar-thumb {
     width: 5px;
     padding-left: 3px;
     background-clip: padding-box;
-    background: rgba(#000,0.5);
+    background: rgba(#000, 0.5);
     border-left: 3px white solid;
     background-clip: padding-box;
   }
-  @media(max-width:639px){
-    max-height: 306px;
-  }
-  @media(max-height:660px){
-    max-height: 250px;
-  }
-  @media(max-height:720px){
-    max-height: 306px;
-  }
+
 }
-.appitemsgrid{
-  margin: 0 -5px 8px;
-  .deleteAppBtn,.Add{
-    width: 50px!important;
+
+.appitemsgrid {
+  margin: 0px;
+
+  .deleteAppBtn,
+  .Add {
+    width: 50px !important;
   }
-  .app-icon{
+
+  .app-icon {
     width: 40px;
     height: 40px;
-    margin-right: 4px!important;
+    margin-right: 4px !important;
   }
-  .app-name{
+
+  .app-name {
     font-size: 13px;
   }
 }
+
 .viewtogglebuttons {
   padding-top: 8px;
   margin-bottom: 18px;
   display: block;
 }
+
 // AppPanel.module.scss
 .selectedView {
   color: #000 !important;
 }
-.panelappbutton{
+
+.panelappbutton {
   padding: 9px 22px;
   border-radius: 2px;
-  border:1px solid #DCDCDC;
+  border: 1px solid #DCDCDC;
   font-size: 14px;
   height: 40px;
   min-width: 91px;
-  color:#000000!important;
-  background: none!important;
-  &:hover{
-    color:#ccc!important;
-    border:1px solid #ccc!important;
+  color: #000000 !important;
+  background: none !important;
+  float: right;
+  margin-left: 5px;
+
+  &:hover {
+    color: #ccc !important;
+    border: 1px solid #ccc !important;
+  }
+
+  @media(max-width:480px) {
+    text-align: center;
+    float: none !important;
+    margin-left: 15%;
+    width: 70%;
   }
 }
-.deleteAppBtn{
-  border-color: #FAF8F8!important;
-  color:#FF0000;
+
+.deleteAppBtn {
+  border-color: #FAF8F8 !important;
+  color: #FF0000;
   background: #FAF8F8;
-  i{
+
+  i {
     font-size: 20px;
   }
-  &:hover{
+
+  &:hover {
     background: #FAF8F8;
-    i{
-      color:#FF0000;
+
+    i {
+      color: #FF0000;
     }
   }
 }
-.appModel{
-  > div:nth-child(2){
-    width: 465px!important;
-    @media(max-width:479px){
+
+.appModel {
+  >div:nth-child(2) {
+    width: 465px !important;
+
+    @media(max-width:479px) {
       width: 380px;
     }
-    @media(max-width:390px){
+
+    @media(max-width:390px) {
       width: 300px;
     }
   }
 }
-.appsearchbox{
+
+.appsearchbox {
   margin-bottom: 18px;
-  input{
+
+  input {
     background: #FAFAFA;
     height: 40px;
     display: block;
-    &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+
+    &::-webkit-input-placeholder {
+      /* Chrome/Opera/Safari */
       color: #333333;
       opacity: 1;
     }
-    &::-moz-placeholder { /* Firefox 19+ */
+
+    &::-moz-placeholder {
+      /* Firefox 19+ */
       color: #333333;
       opacity: 1;
     }
-    &:-ms-input-placeholder { /* IE 10+ */
+
+    &:-ms-input-placeholder {
+      /* IE 10+ */
       color: #333333;
       opacity: 1;
     }
-    &:-moz-placeholder { /* Firefox 18- */
+
+    &:-moz-placeholder {
+      /* Firefox 18- */
       color: #333333;
       opacity: 1;
     }
   }
-  & > div{
+
+  &>div {
     border-bottom: 1px solid #000;
-    &::after{
+
+    &::after {
       display: none;
     }
-    & > div{
+
+    &>div {
       height: 40px;
     }
   }
@@ -254,31 +335,59 @@ button:hover,
 
 @media (max-width: 768px) {
   .viewtogglebuttons {
-    display: none;
-  }
-}
-@media (max-width: 640px) {
-  .viewtogglebuttons {
-    display: none;
-  }
-}
-@media (max-width: 480px) {
-  .viewtogglebuttons {
-    display: none;
+    display: block;
   }
 }
 
-.dragHandle {
-  cursor: grab; /* Style to indicate this can be used to drag the item */
- 
+@media (max-width: 640px) {
+  .viewtogglebuttons {
+    display: block;
+  }
 }
-.dragIconStyle{
+
+@media (max-width: 480px) {
+  .viewtogglebuttons {
+    display: block;
+  }
+
+  .main {
+    width: 100%;
+  }
+
+  .ms-Panel-main
+  {
+    width: 100% !important;
+  }
+  .viewAllApplicationLink{
+    margin: 10px;
+    display: block;
+   text-align: center;
+    columns: #663399;
+    font-size: 14px;
+    text-decoration: none !important;
+    float: none !important;
+  }
+ 
+
+}
+
+.dragHandle {
+  cursor: grab;
+  /* Style to indicate this can be used to drag the item */
+
+}
+
+.dragIconStyle {
   float: left;
   margin: 25px 10px 0px;
 }
+
 .dragIcon {
   display: inline-block;
-  width: 20px; /* Example size */
-  height: 20px; /* Example size */
-  background-color: #ccc; /* Example color */
+  width: 20px;
+  /* Example size */
+  height: 20px;
+  /* Example size */
+  background-color: #ccc;
+  /* Example color */
 }

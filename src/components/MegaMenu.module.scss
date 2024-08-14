@@ -311,6 +311,17 @@
   // Add additional styling as needed
 }
 
+@media(max-width:640px) {
+  .searchIcon {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 18px;
+   padding-top: 5px;
+  }
+}
+
+
+
 .headerMenu {
   display: flex;
   align-items: center;

@@ -22,6 +22,7 @@ export interface IAppItem {
   Link: any;
   Default: any;
   OpenInNewTab: any;
+  ID:any;
 }
 
 const appstackStyles: IStackStyles = {
@@ -50,12 +51,21 @@ const stackItemStyles: IStackItemStyles = {
   },
 };
 
+const secondStackItemStyles: IStackItemStyles = {
+  root: {
+    alignItems: 'center',
+    color: DefaultPalette.white,
+    display: 'flex',
+    minHeight: 50,
+    justifyContent: 'flex-start', // Align items to the left
+  },
+};
 const thirdStackItemStyles: IStackItemStyles = {
   root: {
     alignItems: 'center',
     color: DefaultPalette.white,
     display: 'flex',
-    height: 50,
+    minHeight: 50,
     justifyContent: 'flex-end', // Align items to the right
   },
 };
@@ -139,7 +149,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
   };
 
   fetchDefaultApps = async () => {
-    const url = `${API_URLS.BASE_URL}/_api/web/lists/getbytitle('BioWeb Applications')/items?$orderBy=Title asc&$select=Title,Icon,Link,Default,OpenInNewTab`;
+    const url = `https://conais.sharepoint.com/sites/SPFXDEV/_api/web/lists/getbytitle('BioWeb Applications')/items?$orderBy=Title asc&$select=Title,Icon,Link,Default,OpenInNewTab,ID`;
     const response = await fetch(url, {
       headers: {
         'Accept': 'application/json;odata=verbose',
@@ -149,7 +159,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
     });
     if (!response.ok) throw new Error('Failed to fetch');
     const result = await response.json();
-    const defaultCheckedApps = result.d.results.filter((app:any) => app.Default === true);
+    const defaultCheckedApps = result.d.results.filter((app: any) => app.Default === true);
     this.setState({ catalogApps: result.d.results, defaultCheckedApps });
   };
 
@@ -160,8 +170,50 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
       return;
     }
 
-    const listUrl = `${API_URLS.BASE_URL}/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items?$filter=UserIdId eq ${userId}&$select=Preferences,ViewType`;
-    const response = await fetch(listUrl, {
+    const listUrl = `https://conais.sharepoint.com/sites/SPFXDEV/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items?$filter=UserIdId eq ${userId}&$select=ID,Preferences,ViewType`;
+    try {
+      const response = await fetch(listUrl, {
+        headers: {
+          'Accept': 'application/json;odata=verbose',
+          'Content-Type': 'application/json;odata=verbose'
+        },
+        credentials: 'include'
+      });
+
+      if (!response.ok) throw new Error(`Failed to fetch user preferences: ${response.statusText}`);
+      const result = await response.json();
+      if (result.d.results.length > 0) {
+        const userPreferences = result.d.results[0].Preferences ? JSON.parse(result.d.results[0].Preferences) : [];
+        const viewType = result.d.results[0].ViewType || 'list';
+
+        // Validate and potentially update user preferences based on current catalog apps
+        const updatedPreferences = await this.validateAndUpdatePreferences(userPreferences);
+
+        if (JSON.stringify(userPreferences) !== JSON.stringify(updatedPreferences)) {
+          // Save updated preferences if they have changed
+          await this.saveUserPreferences(updatedPreferences);
+        }
+
+        this.setState({
+          userPreferences: JSON.stringify(updatedPreferences),
+          selectedApps: updatedPreferences,
+          viewType
+        }, this.fetchApps);
+      } else {
+        if (this.state.defaultCheckedApps.length > 0) {
+          this.saveDefaultPreferences(userId);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching user preferences:", error);
+      if (this.state.defaultCheckedApps.length > 0) {
+        this.saveDefaultPreferences(userId);
+      }
+    }
+  };
+  validateAndUpdatePreferences = async (preferences: any) => {
+    const appsUrl = `https://conais.sharepoint.com/sites/SPFXDEV/_api/web/lists/getbytitle('BioWeb Applications')/items?$select=ID,Title,Link,Icon,OpenInNewTab,Default`;
+    const response = await fetch(appsUrl, {
       headers: {
         'Accept': 'application/json;odata=verbose',
         'Content-Type': 'application/json;odata=verbose'
@@ -169,20 +221,73 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
       credentials: 'include'
     });
 
-    if (!response.ok) throw new Error(`Failed to fetch user preferences: ${response.statusText}`);
-    const result = await response.json();
-    if (result.d.results.length > 0) {
-      const userPreferences = JSON.parse(result.d.results[0].Preferences);
-      this.setState({ userPreferences: result.d.results[0].Preferences, selectedApps: userPreferences, viewType: result.d.results[0].ViewType }, this.fetchApps);
-    } else {
-      // No preferences found, save default apps as preferences if any
-      if (this.state.defaultCheckedApps.length > 0) {
-        this.saveDefaultPreferences(userId);
-      }
+    if (!response.ok) {
+      console.error("Failed to fetch applications for validation:", response.statusText);
+      return preferences; // If fetch fails, return original preferences
     }
+    const result = await response.json();
+    const validApps = result.d.results;
+
+    // Function to extract item ID from URI
+    const extractItemIdFromUri = (uri: string) => {
+      const match = uri.match(/Items\((\d+)\)/);
+      return match ? match[1] : null;
+    };
+
+    let isUpdated = false; // Track if any updates have been made
+    const updatedPreferences = preferences.map((pref: any) => {
+
+      // Extract ID from __metadata.uri or use pref.Id
+      const prefItemId = pref.__metadata ? extractItemIdFromUri(pref.__metadata.uri) : pref.ID.toString();
+      console.log(`Checking preference ID: ${prefItemId}`); // Debug log
+
+      // Find the application that matches the preference ID
+      const foundApp = validApps.find((app: any) => app.Id.toString() === prefItemId);
+      let needsUpdate = false;
+      if (foundApp) {
+
+        let updatedPref = { ...pref };
+
+        // Compare each property
+        if (pref.Title !== foundApp.Title) {
+          updatedPref.Title = foundApp.Title;
+          needsUpdate = true;
+        }
+        if (!pref.Link || pref.Link.Url !== foundApp.Link.Url) {
+          updatedPref.Link = { Url: foundApp.Link.Url }; // Assuming Link is an object with Url property
+          needsUpdate = true;
+        }
+        if (pref.OpenInNewTab !== foundApp.OpenInNewTab) {
+          updatedPref.OpenInNewTab = foundApp.OpenInNewTab;
+          needsUpdate = true;
+        }
+        if (pref.Icon !== foundApp.Icon) {
+          updatedPref.Icon = foundApp.Icon;
+          needsUpdate = true;
+        }
+        if (pref.Default !== foundApp.Default) {
+          updatedPref.Default = foundApp.Default;
+          needsUpdate = true;
+        }
+        if (needsUpdate) {
+          console.log(`Updating preference with ID: ${prefItemId}`); // Debug log
+          isUpdated = true;
+          return updatedPref;
+        }
+
+        return pref; // Return as is if no updates needed
+      } else {
+        isUpdated = true;
+        console.log(`No matching app found for preference with ID: ${prefItemId}`); // Debug log
+        return null; // No app found, mark for deletion
+      }
+    }).filter((pref: any) => pref !== null); // Remove null entries (deleted items)
+
+    // Return updated preferences if changes were detected, else return original
+    return isUpdated ? updatedPreferences : preferences;
   };
 
-  saveDefaultPreferences = async (userId:any) => {
+  saveDefaultPreferences = async (userId: any) => {
     const preferencesToSave = JSON.stringify(this.state.defaultCheckedApps);
     const viewTypeToSave = 'list'; // default viewType for new users
 
@@ -222,10 +327,10 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
     this.setState({ userPreferences: preferencesToSave, selectedApps: this.state.defaultCheckedApps, viewType: viewTypeToSave });
   };
 
-  
+
 
   private fetchApps = async (): Promise<void> => {
-    const listUrl = `${API_URLS.BASE_URL}/_api/web/lists/getbytitle('BioWeb Applications')/items?$orderBy=Title asc&$select=Title,Icon,Link,Default,OpenInNewTab`;
+    const listUrl = `https://conais.sharepoint.com/sites/SPFXDEV/_api/web/lists/getbytitle('BioWeb Applications')/items?$orderBy=Title asc&$select=Title,Icon,Link,Default,OpenInNewTab,ID`;
 
     try {
       const response = await fetch(listUrl, {
@@ -254,9 +359,8 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
       console.error("Error fetching apps:", error);
     }
   }
-
-  getCurrentUserId = async () => {
-    const url = `${API_URLS.BASE_URL}/_api/web/currentUser`;
+  getCurrentUserId = async (): Promise<number> => {
+     const url = `https://conais.sharepoint.com/sites/SPFXDEV/_api/web/currentUser`;
     try {
       const response = await fetch(url, {
         headers: {
@@ -274,50 +378,17 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
     }
   };
 
- /* private fetchUserPreferences = async (): Promise<void> => {
+ 
+  saveUserPreferences = async (selectedPreferencesToSave: any): Promise<void> => {
     const userId = await this.getCurrentUserId();
-    if (userId === -1) {
-      this.fetchDefaultApps(); // Fetch default apps if unable to obtain valid user ID
-      return;
-    }
-
-    const listUrl = `${API_URLS.BASE_URL}/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items?$filter=UserIdId eq ${userId}&$select=Preferences,ViewType`;
-
-    try {
-      const response = await fetch(listUrl, {
-        headers: {
-          'Accept': 'application/json;odata=verbose',
-          'Content-Type': 'application/json;odata=verbose'
-        },
-        credentials: 'include'
-      });
-
-      if (!response.ok) throw new Error(`Failed to fetch user preferences: ${response.statusText}`);
-
-      const result = await response.json();
-      const items = result.d.results;
-
-      if (items.length > 0) {
-        const userPreferences = items[0].Preferences ? JSON.parse(items[0].Preferences) : [];
-        const viewType = items[0].ViewType || 'list'; // Default to 'list' if ViewType is not set
-        this.setState({ userPreferences: items[0].Preferences, selectedApps: userPreferences, viewType }, this.fetchApps);
-      } else {
-        this.fetchDefaultApps(); // Fetch default apps if no user preferences
-      }
-    } catch (error) {
-      console.error("Error fetching user preferences:", error);
-      this.fetchDefaultApps(); // Fetch default apps as a fallback
-    }
-  };*/
-
-  saveUserPreferences = async (): Promise<void> => {
-    const userId = await this.getCurrentUserId();
+    
     if (userId === -1) {
       console.error("Invalid user ID");
       return;
     }
 
-    const digestUrl = `${API_URLS.BASE_URL}/_api/contextinfo`;
+    // Fetch request digest for updates or additions
+    const digestUrl = `https://conais.sharepoint.com/sites/SPFXDEV/_api/contextinfo`;
     const digestResponse = await fetch(digestUrl, {
       method: 'POST',
       headers: {
@@ -335,10 +406,13 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
     const digestResult = await digestResponse.json();
     const requestDigest = digestResult.d.GetContextWebInformation.FormDigestValue;
 
-    const preferencesToSave = JSON.stringify(this.state.selectedApps);
-    const viewTypeToSave = this.state.viewType;
-    const listUrl = `${API_URLS.BASE_URL}/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items?$filter=UserIdId eq ${userId}`;
+    // Validate and potentially update local preferences before saving
 
+    let preferencesToSave = JSON.stringify(selectedPreferencesToSave);
+    const viewTypeToSave = this.state.viewType;
+
+    // Check if user preferences already exist
+    const listUrl = `https://conais.sharepoint.com/sites/SPFXDEV/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items?$filter=UserIdId eq ${userId}`;
     const existingItemsResponse = await fetch(listUrl, {
       headers: {
         'Accept': 'application/json;odata=verbose',
@@ -354,8 +428,9 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
 
     const existingItems = await existingItemsResponse.json();
     if (existingItems.d.results.length > 0) {
+      // Update existing preferences
       const itemId = existingItems.d.results[0].Id;
-      const updateUrl = `${API_URLS.BASE_URL}/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items(${itemId})`;
+      const updateUrl = `https://conais.sharepoint.com/sites/SPFXDEV/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items(${itemId})`;
       const updateResponse = await fetch(updateUrl, {
         method: 'POST',
         headers: {
@@ -379,7 +454,8 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
       }
       console.log("Preferences updated successfully.");
     } else {
-      const addUrl = `${API_URLS.BASE_URL}/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items`;
+      // Add new preferences
+      const addUrl = `https://conais.sharepoint.com/sites/SPFXDEV/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items`;
       const addResponse = await fetch(addUrl, {
         method: 'POST',
         headers: {
@@ -404,6 +480,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
     }
   };
 
+
   onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
 
@@ -416,8 +493,11 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
     apps.splice(destination.index, 0, reorderedApp);
 
     this.setState({
-      selectedApps: apps,
-    }, this.saveUserPreferences);
+      selectedApps: apps
+    },() => {
+      this.saveUserPreferences(this.state.selectedApps);
+    });
+   
   };
 
   private _togglePanel = (): void => {
@@ -428,8 +508,8 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
   };
 
   private _toggleEditMode = (): void => {
-    if(this.state.showEditDialog){
-      this.saveUserPreferences();
+    if (this.state.showEditDialog) {
+      this.saveUserPreferences(this.state.selectedApps);
     }
     this.setState(prevState => ({
       showEditDialog: !prevState.showEditDialog,
@@ -463,7 +543,10 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
   };
 
   private setViewType = (viewType: 'list' | 'grid') => {
-    this.setState({ viewType }, this.saveUserPreferences);
+    this.setState({ viewType }, () => {
+      this.saveUserPreferences(this.state.selectedApps);
+    });
+
   };
 
   renderAppItem = (app: IAppItem, index: number, isGridView: boolean) => {
@@ -502,7 +585,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
               }}
             />
           </Stack.Item>
-          <Stack.Item grow={4} styles={stackItemStyles}>
+          <Stack.Item grow={4} styles={secondStackItemStyles}>
             <a href={app.Link ? app.Link.Url : ''}
               target={targetValue}
               data-interception={interceptionValue} style={{ cursor: 'pointer', textDecoration: 'none' }}><span className="app-name" style={{ color: '#3C3C3C' }}>{app.Title}</span></a>
@@ -603,7 +686,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
           onDismiss={this._closePanel}
           closeButtonAriaLabel="Close"
           headerText="Applications"
-          className={styles.apppanel}
+         
         >
           {(selectedApps.length != 0 || catalogApps.length != 0 || showEditDialog) && <div className={styles.viewtogglebuttons} style={{ textAlign: 'right' }}>
             <span title="Grid View" style={{ cursor: 'pointer' }}>
@@ -668,15 +751,13 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
           </div>}
           <div>
             {this.state.viewAllLink && (
-              <a href={this.state.viewAllLink} target="_blank" data-interception="off" style={{ margin: '10px', display: 'block', float: 'left', color: '#663399', fontSize: '14px', textDecoration: 'none' }}>View all applications</a>
+              <a href={this.state.viewAllLink} target="_blank" data-interception="off" className={styles.viewAllApplicationLink}>View all applications</a>
             )}
             <PrimaryButton
               text={buttonText}
               onClick={this._toggleEditMode}
               className={styles.panelappbutton}
-              styles={{
-                root: { marginLeft: '5px', float: 'right' } // Apply margin-left of 10px
-              }}
+             
             />
           </div>
         </Panel>
