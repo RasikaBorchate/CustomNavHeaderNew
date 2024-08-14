@@ -354,10 +354,17 @@ button:hover,
     width: 100%;
   }
 
+
+
+
+  *[class*="ms-Panel-main"],
   .ms-Panel-main
   {
-    width: 100% !important;
+    width: 100% ;
   }
+
+
+
   .viewAllApplicationLink{
     margin: 10px;
     display: block;
