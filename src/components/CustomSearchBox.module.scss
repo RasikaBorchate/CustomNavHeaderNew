@@ -1,0 +1,30 @@
+.searchBoxContainer {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  
+  .searchInput {
+    font-size: 16px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    transition: width 0.3s ease;
+    width: 0;
+    visibility: hidden;
+  }
+  
+  .searchInput:focus {
+    width: 200px;
+    visibility: visible;
+  }
+  
+  .searchIcon {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 24px;
+    margin-left: 8px;
+    color: #000;
+  }
+  

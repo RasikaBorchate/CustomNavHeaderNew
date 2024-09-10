@@ -149,7 +149,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
   };
 
   fetchDefaultApps = async () => {
-    const url = `https://conais.sharepoint.com/sites/SPFXDEV/_api/web/lists/getbytitle('BioWeb Applications')/items?$orderBy=Title asc&$select=Title,Icon,Link,Default,OpenInNewTab,ID`;
+    const url = `https://bmrn.sharepoint.com/sites/bioweb-home/_api/web/lists/getbytitle('BioWeb Applications')/items?$orderBy=Title asc&$select=Title,Icon,Link,Default,OpenInNewTab,ID`;
     const response = await fetch(url, {
       headers: {
         'Accept': 'application/json;odata=verbose',
@@ -170,7 +170,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
       return;
     }
 
-    const listUrl = `https://conais.sharepoint.com/sites/SPFXDEV/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items?$filter=UserIdId eq ${userId}&$select=ID,Preferences,ViewType`;
+    const listUrl = `https://bmrn.sharepoint.com/sites/bioweb-home/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items?$filter=UserIdId eq ${userId}&$select=ID,Preferences,ViewType`;
     try {
       const response = await fetch(listUrl, {
         headers: {
@@ -212,7 +212,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
     }
   };
   validateAndUpdatePreferences = async (preferences: any) => {
-    const appsUrl = `https://conais.sharepoint.com/sites/SPFXDEV/_api/web/lists/getbytitle('BioWeb Applications')/items?$select=ID,Title,Link,Icon,OpenInNewTab,Default`;
+    const appsUrl = `https://bmrn.sharepoint.com/sites/bioweb-home/_api/web/lists/getbytitle('BioWeb Applications')/items?$select=ID,Title,Link,Icon,OpenInNewTab,Default`;
     const response = await fetch(appsUrl, {
       headers: {
         'Accept': 'application/json;odata=verbose',
@@ -330,7 +330,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
 
 
   private fetchApps = async (): Promise<void> => {
-    const listUrl = `https://conais.sharepoint.com/sites/SPFXDEV/_api/web/lists/getbytitle('BioWeb Applications')/items?$orderBy=Title asc&$select=Title,Icon,Link,Default,OpenInNewTab,ID`;
+    const listUrl = `https://bmrn.sharepoint.com/sites/bioweb-home/_api/web/lists/getbytitle('BioWeb Applications')/items?$orderBy=Title asc&$select=Title,Icon,Link,Default,OpenInNewTab,ID`;
 
     try {
       const response = await fetch(listUrl, {
@@ -360,7 +360,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
     }
   }
   getCurrentUserId = async (): Promise<number> => {
-     const url = `https://conais.sharepoint.com/sites/SPFXDEV/_api/web/currentUser`;
+     const url = `https://bmrn.sharepoint.com/sites/bioweb-home/_api/web/currentUser`;
     try {
       const response = await fetch(url, {
         headers: {
@@ -388,7 +388,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
     }
 
     // Fetch request digest for updates or additions
-    const digestUrl = `https://conais.sharepoint.com/sites/SPFXDEV/_api/contextinfo`;
+    const digestUrl = `https://bmrn.sharepoint.com/sites/bioweb-home/_api/contextinfo`;
     const digestResponse = await fetch(digestUrl, {
       method: 'POST',
       headers: {
@@ -412,7 +412,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
     const viewTypeToSave = this.state.viewType;
 
     // Check if user preferences already exist
-    const listUrl = `https://conais.sharepoint.com/sites/SPFXDEV/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items?$filter=UserIdId eq ${userId}`;
+    const listUrl = `https://bmrn.sharepoint.com/sites/bioweb-home/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items?$filter=UserIdId eq ${userId}`;
     const existingItemsResponse = await fetch(listUrl, {
       headers: {
         'Accept': 'application/json;odata=verbose',
@@ -430,7 +430,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
     if (existingItems.d.results.length > 0) {
       // Update existing preferences
       const itemId = existingItems.d.results[0].Id;
-      const updateUrl = `https://conais.sharepoint.com/sites/SPFXDEV/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items(${itemId})`;
+      const updateUrl = `https://bmrn.sharepoint.com/sites/bioweb-home/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items(${itemId})`;
       const updateResponse = await fetch(updateUrl, {
         method: 'POST',
         headers: {
@@ -455,7 +455,7 @@ export default class AppPanel extends React.Component<IAppPanelProps, IAppPanelS
       console.log("Preferences updated successfully.");
     } else {
       // Add new preferences
-      const addUrl = `https://conais.sharepoint.com/sites/SPFXDEV/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items`;
+      const addUrl = `https://bmrn.sharepoint.com/sites/bioweb-home/_api/web/lists/getbytitle('BioWeb Applications - User Preferences')/items`;
       const addResponse = await fetch(addUrl, {
         method: 'POST',
         headers: {
